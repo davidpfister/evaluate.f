@@ -1,0 +1,14 @@
+name = "evaluate"
+
+[preprocess]
+cpp.suffixes = ["F90", "f90"]
+cpp.macros = ["_FPM"]
+
+[library]
+source-dir = "src"
+
+[fortran]
+implicit-external = true
+
+[install]
+library = false

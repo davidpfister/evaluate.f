@@ -82,6 +82,7 @@ StyleCopReport.xml
 *.pgc
 *.pgd
 *.rsp
+!fpm.rsp
 *.sbr
 *.tlb
 *.tli
@@ -396,3 +397,8 @@ FodyWeavers.xsd
 
 # JetBrains Rider
 *.sln.iml
+# Visual Fortran
+tests/info.sys
+sys.info
+*.fdz
+*.u2d
