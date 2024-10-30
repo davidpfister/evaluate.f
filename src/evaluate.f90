@@ -1,6 +1,6 @@
 module evaluate
     use evaluate_strings
-    use evaluate_precision
+    use evaluate_kinds
 
     private
     
@@ -13,7 +13,7 @@ module evaluate
 
     type param
         character(len=24):: symbol
-        complex(kc8):: value
+        complex(c8):: value
     end type param
 
     interface defparam
@@ -47,7 +47,7 @@ module evaluate
     integer, parameter :: numtok = 100 ! Maximum number of tokens
     type(param) :: params(100) ! Symbol table
     integer :: nparams = 0, itop, ibin
-    complex(kc8) :: valstack(numtok) ! Stack used in evaluation of expression
+    complex(c8) :: valstack(numtok) ! Stack used in evaluation of expression
     type(item):: opstack(numtok) ! Operator stack used in conversion to postfix
     integer :: ierr ! Error flag
 
@@ -61,13 +61,13 @@ contains
         ! val double precision complex
 
         character(len=*), intent(in) :: expr
-        complex(kc8) :: val
+        complex(c8) :: val
         character(len=len(expr) + 1) :: tempstr
         character :: cop
         integer :: isp(numtok) ! On stack priority of operators in opstack
         integer :: lstr
-        complex(kc8) :: cval, oper1, oper2
-        real(kr8) :: valr, vali
+        complex(c8) :: cval, oper1, oper2
+        real(r8) :: valr, vali
         type(item):: token(numtok) ! List of tokens ( a token is an operator or
         ! operand) in postfix order
         type(item) :: x, junk, tok
@@ -77,9 +77,9 @@ contains
 
         if (nparams == 0) then ! Initialize symbol table
             params(1)%symbol = 'PI'
-            params(1)%value = (3.14159265358979_kr8, 0.0_kr8)
+            params(1)%value = (3.14159265358979_r8, 0.0_r8)
             params(2)%symbol = 'I'
-            params(2)%value = (0.0_kr8, 1.0_kr8)
+            params(2)%value = (0.0_r8, 1.0_r8)
             nparams = 2
         end if
 
@@ -205,7 +205,7 @@ contains
                 case ('*')
                     cval = oper2*oper1
                 case ('/')
-                    if (oper1 == (0._kr8, 0._kr8)) then
+                    if (oper1 == (0._r8, 0._r8)) then
                         ierr = 10
                         write (*, *) 'Error in expression ', trim(expr)
                         write (*, *) 'Division by zero'
@@ -254,7 +254,7 @@ contains
                     cval = cos(oper1)
                 case ('TAN')
                     oper2 = cos(oper1)
-                    if (abs(oper2) == 0.0_kr8) then
+                    if (abs(oper2) == 0.0_r8) then
                         ierr = 14
                         write (*, *) 'Error: argument of tan function a multiple', &
                             ' of pi/2 in expression ', trim(expr)
@@ -276,7 +276,7 @@ contains
                 case ('ATAN')
                     cval = atan(oper1)
                 case ('SQRT')
-                    if (real(oper1, kr8) < 0. .and. aimag(oper1) == 0.) then
+                    if (real(oper1, r8) < 0. .and. aimag(oper1) == 0.) then
                         ierr = 9
                         write (*, *) 'Warning: square root of negative real number', &
                             ' in expression ', trim(expr)
@@ -286,7 +286,7 @@ contains
                 case ('ABS')
                     cval = abs(oper1)
                 case ('LOG')
-                    if (real(oper1, kr8) <= 0. .and. aimag(oper1) == 0.) then
+                    if (real(oper1, r8) <= 0. .and. aimag(oper1) == 0.) then
                         ierr = 8
                         write (*, *) 'Error: negative real or zero argument for', &
                             ' natural logarithm in expression ', trim(expr)
@@ -295,14 +295,14 @@ contains
                     end if
                     cval = log(oper1)
                 case ('LOG10')
-                    if (real(oper1, kr8) <= 0. .and. aimag(oper1) == 0.) then
+                    if (real(oper1, r8) <= 0. .and. aimag(oper1) == 0.) then
                         ierr = 8
                         write (*, *) 'Error: negative real or zero argument for base', &
                             '10 logarithm in expression ', trim(expr)
                         write (*, *)
                         return
                     end if
-                    cval = log(oper1)/2.30258509299405_kr8
+                    cval = log(oper1)/2.30258509299405_r8
                 case ('EXP')
                     cval = exp(oper1)
                 case ('COMPLEX')
@@ -315,15 +315,15 @@ contains
                     else
                         call popval(oper2) ! Pull second argument off stack
                     end if
-                    valr = real(oper2, kr8)
-                    vali = real(oper1, kr8)
-                    cval = cmplx(valr, vali, kc8)
+                    valr = real(oper2, r8)
+                    vali = real(oper1, r8)
+                    cval = cmplx(valr, vali, c8)
                 case ('CONJG')
                     cval = conjg(oper1)
                 case ('ANG')
-                    cval = atan2(aimag(oper1), real(oper1, kr8))
+                    cval = atan2(aimag(oper1), real(oper1, r8))
                 case ('REAL')
-                    cval = real(oper1, kr8)
+                    cval = real(oper1, r8)
                 case ('IMAG')
                     cval = aimag(oper1)
                 case default ! Undefined function
@@ -459,8 +459,8 @@ contains
     subroutine EVALEXPR_SC(expr, val) ! Evaluate expression expr for
         ! val single precision complex
         character(len=*) :: expr
-        complex(kc4) :: val
-        complex(kc8) :: vald
+        complex(c4) :: val
+        complex(c8) :: vald
 
         call evalexpr_dc(expr, vald)
         val = vald
@@ -472,8 +472,8 @@ contains
     subroutine EVALEXPR_SR(expr, val) ! Evaluate expression expr for
         ! val single precision real
         character(len=*) :: expr
-        real(kr4) :: val
-        complex(kc8) :: vald
+        real(r4) :: val
+        complex(c8) :: vald
 
         call evalexpr_dc(expr, vald)
         val = real(vald)
@@ -485,11 +485,11 @@ contains
     subroutine EVALEXPR_DR(expr, val) ! Evaluate expression expr for
         ! val double precision real
         character(len=*) :: expr
-        real(kr8) :: val
-        complex(kc8) :: vald
+        real(r8) :: val
+        complex(c8) :: vald
 
         call evalexpr_dc(expr, vald)
-        val = real(vald, kr8)
+        val = real(vald, r8)
 
     end subroutine evalexpr_dr
 
@@ -498,11 +498,11 @@ contains
     subroutine EVALEXPR_SI(expr, ival) ! Evaluate expression expr for
         ! ival single precision integer
         character(len=*) :: expr
-        integer(ki4) :: ival
-        complex(kc8) :: vald
+        integer(i4) :: ival
+        complex(c8) :: vald
 
         call evalexpr_dc(expr, vald)
-        ival = nint(real(vald, kr8), ki4)
+        ival = nint(real(vald, r8), i4)
 
     end subroutine evalexpr_si
 
@@ -511,11 +511,11 @@ contains
     subroutine EVALEXPR_DI(expr, ival) ! Evaluate expression expr for
         ! ival double precision integer
         character(len=*) :: expr
-        integer(ki8) :: ival
-        complex(kc8) :: vald
+        integer(i8) :: ival
+        complex(c8) :: vald
 
         call evalexpr_dc(expr, vald)
-        ival = nint(real(vald, kr8), ki8)
+        ival = nint(real(vald, r8), i8)
 
     end subroutine evalexpr_di
 
@@ -524,14 +524,14 @@ contains
         ! val double precision complex
         character(len=*) :: sym
         character(len=len_trim(sym)) :: usym
-        complex(kc8) :: val
+        complex(c8) :: val
         integer :: i
         ierr = 0
         if (nparams == 0) then ! Initialize symbol table
             params(1)%symbol = 'PI'
-            params(1)%value = (3.14159265358979_kr8, 0.0_kr8)
+            params(1)%value = (3.14159265358979_r8, 0.0_r8)
             params(2)%symbol = 'I'
-            params(2)%value = (0.0_kr8, 1.0_kr8)
+            params(2)%value = (0.0_r8, 1.0_r8)
             nparams = 2
         end if
 
@@ -561,8 +561,8 @@ contains
     subroutine VALDEF_SC(sym, val) ! Associates sym with val in symbol table,
         ! val single precision complex
         character(len=*) :: sym
-        complex(kc4) :: val
-        complex(kc8) :: vald
+        complex(c4) :: val
+        complex(c8) :: vald
 
         vald = val
         call valdef_dc(sym, vald)
@@ -574,10 +574,10 @@ contains
     subroutine VALDEF_DR(sym, val) ! Associates sym with val in symbol table,
         ! val double precision real
         character(len=*) :: sym
-        real(kr8) :: val
-        complex(kc8) :: vald
+        real(r8) :: val
+        complex(c8) :: vald
 
-        vald = cmplx(val, 0.0_kr8, kc8)
+        vald = cmplx(val, 0.0_r8, c8)
         call valdef_dc(sym, vald)
 
     end subroutine valdef_dr
@@ -587,10 +587,10 @@ contains
     subroutine VALDEF_SR(sym, val) ! Associates sym with val in symbol table,
         ! val single precision real
         character(len=*) :: sym
-        real(kr4) :: val
-        complex(kc8) :: vald
+        real(r4) :: val
+        complex(c8) :: vald
 
-        vald = cmplx(val, 0.0, kc8)
+        vald = cmplx(val, 0.0, c8)
         call valdef_dc(sym, vald)
 
     end subroutine valdef_sr
@@ -600,10 +600,10 @@ contains
     subroutine VALDEF_DI(sym, ival) ! Associates sym with ival in symbol table,
         ! ival double precision integer
         character(len=*) :: sym
-        integer(ki8) :: ival
-        complex(kc8) :: vald
+        integer(i8) :: ival
+        complex(c8) :: vald
 
-        vald = cmplx(real(ival, kr8), 0.0_kr8, kc8)
+        vald = cmplx(real(ival, r8), 0.0_r8, c8)
         call valdef_dc(sym, vald)
 
     end subroutine valdef_di
@@ -613,10 +613,10 @@ contains
     subroutine VALDEF_SI(sym, ival) ! Associates sym with ival in symbol table,
         ! ival single precision integer
         character(len=*) :: sym
-        integer(ki4) :: ival
-        complex(kc8) :: vald
+        integer(i4) :: ival
+        complex(c8) :: vald
 
-        vald = cmplx(real(ival, kr8), 0.0, kc8)
+        vald = cmplx(real(ival, r8), 0.0, c8)
         call valdef_dc(sym, vald)
 
     end subroutine valdef_si
@@ -627,13 +627,13 @@ contains
         ! expression expr
 
         character(len=*) :: sym, expr
-        complex(kc8) :: val
+        complex(c8) :: val
 
         if (nparams == 0) then ! Initialize symbol table
             params(1)%symbol = 'PI'
-            params(1)%value = (3.14159265358979_kr8, 0.0_kr8)
+            params(1)%value = (3.14159265358979_r8, 0.0_r8)
             params(2)%symbol = 'I'
-            params(2)%value = (0.0_kr8, 1.0_kr8)
+            params(2)%value = (0.0_r8, 1.0_r8)
             nparams = 2
         end if
 
@@ -652,8 +652,8 @@ contains
         ! to symbol name xinchar.
 
         character(len=*):: xinchar
-        complex(kc8) :: cval
-        real(kr8) :: rval
+        complex(c8) :: cval
+        real(r8) :: rval
         integer :: ios
         ierr = 0
 
@@ -666,7 +666,7 @@ contains
                 write (*, *) 'Error: number string ', trim(xinchar), ' does not correspond to a valid number'
                 write (*, *)
             end if
-            cval = cmplx(rval, 0.0_kr8, kc8)
+            cval = cmplx(rval, 0.0_r8, c8)
             return
         end if
 
@@ -699,7 +699,7 @@ contains
 
     subroutine PUSHVAL(val) ! Puts value on value stack
 
-        complex(kc8) :: val
+        complex(c8) :: val
 
         itop = itop + 1
         if (itop > numtok) then
@@ -713,7 +713,7 @@ contains
 
     subroutine POPVAL(val) ! Takes top value off value stack and assigns it to val
 
-        complex(kc8) :: val
+        complex(c8) :: val
 
         val = valstack(itop)
         itop = itop - 1
@@ -727,7 +727,7 @@ contains
 
         character(len=*) :: sym
         character(len=len_trim(sym)) :: usym
-        complex(kc8) :: var
+        complex(c8) :: var
         integer :: ifind, j
         ierr = 0
         sym = adjustl(sym)
@@ -761,8 +761,8 @@ contains
         ! corresponding to symbol sym
 
         character(len=*) :: sym
-        complex(kc4) :: var
-        complex(kc8) :: vard
+        complex(c4) :: var
+        complex(c8) :: vard
 
         call getparam_dc(sym, vard)
         var = vard
@@ -775,11 +775,11 @@ contains
         ! corresponding to symbol sym
 
         character(len=*) :: sym
-        real(kr8) :: var
-        complex(kc8) :: vard
+        real(r8) :: var
+        complex(c8) :: vard
 
         call getparam_dc(sym, vard)
-        var = real(vard, kr8)
+        var = real(vard, r8)
 
     end subroutine getparam_dr
 
@@ -789,8 +789,8 @@ contains
         ! corresponding to symbol sym
 
         character(len=*) :: sym
-        real(kr4) :: var
-        complex(kc8) :: vard
+        real(r4) :: var
+        complex(c8) :: vard
 
         call getparam_dc(sym, vard)
         var = real(vard)
@@ -803,11 +803,11 @@ contains
         ! corresponding to symbol sym
 
         character(len=*) :: sym
-        integer(ki8) :: ivar
-        complex(kc8) :: vard
+        integer(i8) :: ivar
+        complex(c8) :: vard
 
         call getparam_dc(sym, vard)
-        ivar = nint(real(vard, kr8), ki8)
+        ivar = nint(real(vard, r8), i8)
 
     end subroutine getparam_di
 
@@ -817,11 +817,11 @@ contains
         ! corresponding to symbol sym
 
         character(len=*) :: sym
-        integer(ki4) :: ivar
-        complex(kc8) :: vard
+        integer(i4) :: ivar
+        complex(c8) :: vard
 
         call getparam_dc(sym, vard)
-        ivar = nint(real(vard, kr8), ki4)
+        ivar = nint(real(vard, r8), i4)
 
     end subroutine getparam_si
 
@@ -831,7 +831,7 @@ contains
         integer :: nargs
         character(len=*) :: eqn
         character(len=len(eqn)) :: args(2)
-        complex(kc8) :: val
+        complex(c8) :: val
 
         call parse(eqn, '=', args, nargs) ! Seperate right- and left-hand-sides
         call defparam(adjustl(args(1)), args(2)) ! Evaluate right-hand-side and
@@ -846,9 +846,9 @@ contains
         write (*, '(/a)') ' VARIABLE LIST:'
         if (nparams == 0) then ! Initialize symbol table
             params(1)%symbol = 'PI'
-            params(1)%value = (3.14159265358979_kr8, 0.0_kr8)
+            params(1)%value = (3.14159265358979_r8, 0.0_r8)
             params(2)%symbol = 'I'
-            params(2)%value = (0.0_kr8, 1.0_kr8)
+            params(2)%value = (0.0_r8, 1.0_r8)
             nparams = 2
         end if
         do i = 1, nparams
