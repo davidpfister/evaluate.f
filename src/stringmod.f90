@@ -126,7 +126,7 @@ contains
 
     subroutine removesp(str)
 
-! Removes spaces, tabs, and control characters in string str
+! Removes spaces, tabs, control characters in string str and replace '**' by '^'
 
         character(len=*):: str
         character(len=1):: ch
