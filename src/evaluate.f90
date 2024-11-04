@@ -7,62 +7,58 @@ module evaluate
     public :: valuep, evalexpr, defparam, evaleqn, getparam, listvar, ierr
 
     type item
-        character(len=24):: char
+        character(24):: char
         character :: type
-    end type item
+    end type
 
     type param
-        character(len=24):: symbol
+        character(24):: symbol
         complex(c8):: value
-    end type param
+    end type
 
     interface defparam
         module procedure strdef ! value given by expression
-        module procedure valdef_dc ! Double precision complex value
-        module procedure valdef_sc ! Single precision complex value
-        module procedure valdef_dr ! Double precision real value
-        module procedure valdef_sr ! Single precision real value
-        module procedure valdef_di ! Double precision integer value
-        module procedure valdef_si ! Single precision integer value
+        module procedure valdef_c8 ! Double precision complex value
+        module procedure valdef_c4 ! Single precision complex value
+        module procedure valdef_r8 ! Double precision real value
+        module procedure valdef_r4 ! Single precision real value
+        module procedure valdef_i8 ! Double precision integer value
+        module procedure valdef_i4 ! Single precision integer value
     end interface
 
     interface evalexpr
-        module procedure evalexpr_dc ! Double precision complex result
-        module procedure evalexpr_sc ! Single precision complex result
-        module procedure evalexpr_dr ! Double precision real result
-        module procedure evalexpr_sr ! Single precision real result
-        module procedure evalexpr_di ! Double precision integer result
-        module procedure evalexpr_si ! Single precision integer result
+        module procedure evalexpr_c8 ! Double precision complex result
+        module procedure evalexpr_c4 ! Single precision complex result
+        module procedure evalexpr_r8 ! Double precision real result
+        module procedure evalexpr_r4 ! Single precision real result
+        module procedure evalexpr_i8 ! Double precision integer result
+        module procedure evalexpr_i4 ! Single precision integer result
     end interface
 
     interface getparam
-        module procedure getparam_dc ! Double precision complex result
-        module procedure getparam_sc ! Single precision complex result
-        module procedure getparam_dr ! Double precision real result
-        module procedure getparam_sr ! Single precision real result
-        module procedure getparam_di ! Double precision integer result
-        module procedure getparam_si ! Single precision integer result
+        module procedure getparam_c8 ! Double precision complex result
+        module procedure getparam_c4 ! Single precision complex result
+        module procedure getparam_r8 ! Double precision real result
+        module procedure getparam_r4 ! Single precision real result
+        module procedure getparam_i8 ! Double precision integer result
+        module procedure getparam_i4 ! Single precision integer result
     end interface
 
-    integer, parameter :: numtok = 100 ! Maximum number of tokens
-    type(param) :: params(100) ! Symbol table
-    integer :: nparams = 0, itop, ibin
-    complex(c8) :: valstack(numtok) ! Stack used in evaluation of expression
-    type(item):: opstack(numtok) ! Operator stack used in conversion to postfix
-    integer :: ierr ! Error flag
-
-!**********************************************************************
+    integer, parameter  :: numtok = 100 ! Maximum number of tokens
+    type(param)         :: params(100) ! Symbol table
+    integer             :: nparams = 0, itop, ibin
+    complex(c8)         :: valstack(numtok) ! Stack used in evaluation of expression
+    type(item)          :: opstack(numtok) ! Operator stack used in conversion to postfix
+    integer             :: ierr ! Error flag
 
 contains
-
-!**********************************************************************
 
     subroutine EVALEXPR_DC(expr, val) ! Evaluate expression expr for
         ! val double precision complex
 
-        character(len=*), intent(in) :: expr
+        character(*), intent(in) :: expr
         complex(c8) :: val
-        character(len=len(expr) + 1) :: tempstr
+        character(len(expr) + 1) :: tempstr
         character :: cop
         integer :: isp(numtok) ! On stack priority of operators in opstack
         integer :: lstr
@@ -337,13 +333,13 @@ contains
             end select
         end do
 
-    end subroutine evalexpr_dc
+    end subroutine evalexpr_c8
 
 !**********************************************************************
 
     subroutine GET_NEXT_TOKEN(str, tok, icp, isp)
 
-        character(len=*) :: str
+        character(*) :: str
         character :: cop, chtemp
         type(item) :: tok
         integer :: icp, isp, inext, ipos, lstr, ntok
@@ -458,72 +454,72 @@ contains
 
     subroutine EVALEXPR_SC(expr, val) ! Evaluate expression expr for
         ! val single precision complex
-        character(len=*) :: expr
+        character(*) :: expr
         complex(c4) :: val
         complex(c8) :: vald
 
-        call evalexpr_dc(expr, vald)
+        call evalexpr_c8(expr, vald)
         val = vald
 
-    end subroutine evalexpr_sc
+    end subroutine evalexpr_c4
 
 !**********************************************************************
 
     subroutine EVALEXPR_SR(expr, val) ! Evaluate expression expr for
         ! val single precision real
-        character(len=*) :: expr
+        character(*) :: expr
         real(r4) :: val
         complex(c8) :: vald
 
-        call evalexpr_dc(expr, vald)
+        call evalexpr_c8(expr, vald)
         val = real(vald)
 
-    end subroutine evalexpr_sr
+    end subroutine evalexpr_r4
 
 !**********************************************************************
 
     subroutine EVALEXPR_DR(expr, val) ! Evaluate expression expr for
         ! val double precision real
-        character(len=*) :: expr
+        character(*) :: expr
         real(r8) :: val
         complex(c8) :: vald
 
-        call evalexpr_dc(expr, vald)
+        call evalexpr_c8(expr, vald)
         val = real(vald, r8)
 
-    end subroutine evalexpr_dr
+    end subroutine evalexpr_r8
 
 !**********************************************************************
 
     subroutine EVALEXPR_SI(expr, ival) ! Evaluate expression expr for
         ! ival single precision integer
-        character(len=*) :: expr
+        character(*) :: expr
         integer(i4) :: ival
         complex(c8) :: vald
 
-        call evalexpr_dc(expr, vald)
+        call evalexpr_c8(expr, vald)
         ival = nint(real(vald, r8), i4)
 
-    end subroutine evalexpr_si
+    end subroutine evalexpr_i4
 
 !**********************************************************************
 
     subroutine EVALEXPR_DI(expr, ival) ! Evaluate expression expr for
         ! ival double precision integer
-        character(len=*) :: expr
+        character(*) :: expr
         integer(i8) :: ival
         complex(c8) :: vald
 
-        call evalexpr_dc(expr, vald)
+        call evalexpr_c8(expr, vald)
         ival = nint(real(vald, r8), i8)
 
-    end subroutine evalexpr_di
+    end subroutine evalexpr_i8
 
 !**********************************************************************
     subroutine VALDEF_DC(sym, val) ! Associates sym with val in symbol table,
         ! val double precision complex
-        character(len=*) :: sym
-        character(len=len_trim(sym)) :: usym
+        character(*) :: sym
+        character(len_trim(sym)) :: usym
         complex(c8) :: val
         integer :: i
         ierr = 0
@@ -554,79 +550,79 @@ contains
         params(nparams)%symbol = usym
         params(nparams)%value = val
 
-    end subroutine valdef_dc
+    end subroutine valdef_c8
 
 !**********************************************************************
 
     subroutine VALDEF_SC(sym, val) ! Associates sym with val in symbol table,
         ! val single precision complex
-        character(len=*) :: sym
+        character(*) :: sym
         complex(c4) :: val
         complex(c8) :: vald
 
         vald = val
-        call valdef_dc(sym, vald)
+        call valdef_c8(sym, vald)
 
-    end subroutine valdef_sc
+    end subroutine valdef_c4
 
 !**********************************************************************
 
     subroutine VALDEF_DR(sym, val) ! Associates sym with val in symbol table,
         ! val double precision real
-        character(len=*) :: sym
+        character(*) :: sym
         real(r8) :: val
         complex(c8) :: vald
 
         vald = cmplx(val, 0.0_r8, c8)
-        call valdef_dc(sym, vald)
+        call valdef_c8(sym, vald)
 
-    end subroutine valdef_dr
+    end subroutine valdef_r8
 
 !**********************************************************************
 
     subroutine VALDEF_SR(sym, val) ! Associates sym with val in symbol table,
         ! val single precision real
-        character(len=*) :: sym
+        character(*) :: sym
         real(r4) :: val
         complex(c8) :: vald
 
         vald = cmplx(val, 0.0, c8)
-        call valdef_dc(sym, vald)
+        call valdef_c8(sym, vald)
 
-    end subroutine valdef_sr
+    end subroutine valdef_r4
 
 !**********************************************************************
 
     subroutine VALDEF_DI(sym, ival) ! Associates sym with ival in symbol table,
         ! ival double precision integer
-        character(len=*) :: sym
+        character(*) :: sym
         integer(i8) :: ival
         complex(c8) :: vald
 
         vald = cmplx(real(ival, r8), 0.0_r8, c8)
-        call valdef_dc(sym, vald)
+        call valdef_c8(sym, vald)
 
-    end subroutine valdef_di
+    end subroutine valdef_i8
 
 !**********************************************************************
 
     subroutine VALDEF_SI(sym, ival) ! Associates sym with ival in symbol table,
         ! ival single precision integer
-        character(len=*) :: sym
+        character(*) :: sym
         integer(i4) :: ival
         complex(c8) :: vald
 
         vald = cmplx(real(ival, r8), 0.0, c8)
-        call valdef_dc(sym, vald)
+        call valdef_c8(sym, vald)
 
-    end subroutine valdef_si
+    end subroutine valdef_i4
 
 !**********************************************************************
 
     subroutine STRDEF(sym, expr) ! Associates sym with the value of the
         ! expression expr
 
-        character(len=*) :: sym, expr
+        character(*) :: sym, expr
         complex(c8) :: val
 
         if (nparams == 0) then ! Initialize symbol table
@@ -637,9 +633,9 @@ contains
             nparams = 2
         end if
 
-        call evalexpr_dc(expr, val) ! val is value of expression expr
+        call evalexpr_c8(expr, val) ! val is value of expression expr
         if (ierr == 0 .or. ierr == 9) then
-            call valdef_dc(sym, val) ! Assign val to symbol sym
+            call valdef_c8(sym, val) ! Assign val to symbol sym
         end if
 
     end subroutine strdef
@@ -651,7 +647,7 @@ contains
         ! or value in symbol table corresponding
         ! to symbol name xinchar.
 
-        character(len=*):: xinchar
+        character(*):: xinchar
         complex(c8) :: cval
         real(r8) :: rval
         integer :: ios
@@ -725,8 +721,8 @@ contains
     subroutine GETPARAM_DC(sym, var) ! Find double precision complex value var
         ! corresponding to symbol sym
 
-        character(len=*) :: sym
-        character(len=len_trim(sym)) :: usym
+        character(*) :: sym
+        character(len_trim(sym)) :: usym
         complex(c8) :: var
         integer :: ifind, j
         ierr = 0
@@ -753,84 +749,84 @@ contains
             return
         end if
 
-    end subroutine getparam_dc
+    end subroutine getparam_c8
 
 !**********************************************************************
 
     subroutine GETPARAM_SC(sym, var) ! Find single precision complex value var
         ! corresponding to symbol sym
 
-        character(len=*) :: sym
+        character(*) :: sym
         complex(c4) :: var
         complex(c8) :: vard
 
-        call getparam_dc(sym, vard)
+        call getparam_c8(sym, vard)
         var = vard
 
-    end subroutine getparam_sc
+    end subroutine getparam_c4
 
 !**********************************************************************
 
     subroutine GETPARAM_DR(sym, var) ! Find double precision real value var
         ! corresponding to symbol sym
 
-        character(len=*) :: sym
+        character(*) :: sym
         real(r8) :: var
         complex(c8) :: vard
 
-        call getparam_dc(sym, vard)
+        call getparam_c8(sym, vard)
         var = real(vard, r8)
 
-    end subroutine getparam_dr
+    end subroutine getparam_r8
 
 !**********************************************************************
 
     subroutine GETPARAM_SR(sym, var) ! Find single precision real value var
         ! corresponding to symbol sym
 
-        character(len=*) :: sym
+        character(*) :: sym
         real(r4) :: var
         complex(c8) :: vard
 
-        call getparam_dc(sym, vard)
+        call getparam_c8(sym, vard)
         var = real(vard)
 
-    end subroutine getparam_sr
+    end subroutine getparam_r4
 
 !**********************************************************************
 
     subroutine GETPARAM_DI(sym, ivar) ! Find double precision integer value ivar
         ! corresponding to symbol sym
 
-        character(len=*) :: sym
+        character(*) :: sym
         integer(i8) :: ivar
         complex(c8) :: vard
 
-        call getparam_dc(sym, vard)
+        call getparam_c8(sym, vard)
         ivar = nint(real(vard, r8), i8)
 
-    end subroutine getparam_di
+    end subroutine getparam_i8
 
 !**********************************************************************
 
     subroutine GETPARAM_SI(sym, ivar) ! Find single precision integer value ivar
         ! corresponding to symbol sym
 
-        character(len=*) :: sym
+        character(*) :: sym
         integer(i4) :: ivar
         complex(c8) :: vard
 
-        call getparam_dc(sym, vard)
+        call getparam_c8(sym, vard)
         ivar = nint(real(vard, r8), i4)
 
-    end subroutine getparam_si
+    end subroutine getparam_i4
 
 !**********************************************************************
 
     subroutine EVALEQN(eqn) ! Evaluate an equation
         integer :: nargs
-        character(len=*) :: eqn
-        character(len=len(eqn)) :: args(2)
+        character(*) :: eqn
+        character(len(eqn)) :: args(2)
         complex(c8) :: val
 
         call parse(eqn, '=', args, nargs) ! Seperate right- and left-hand-sides
@@ -855,8 +851,5 @@ contains
             write (*, *) trim(params(i)%symbol), ' = ', params(i)%value
         end do
 
-    end subroutine listvar
-
-!**********************************************************************
-
-end module evaluate
+    end subroutine
+end module
