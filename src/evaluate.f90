@@ -3,8 +3,8 @@ module evaluate
     use evaluate_kinds
 
     private
-    
-    public :: valuep, evalexpr, defparam, evaleqn, getparam, listvar, ierr
+
+    public :: evalexpr, defparam, listvar, evalerr
 
     type item
         character(24) :: char
@@ -49,7 +49,7 @@ module evaluate
     integer             :: nparams = 0, itop, ibin
     complex(c8)         :: valstack(numtok) ! Stack used in evaluation of expression
     type(item)          :: opstack(numtok) ! Operator stack used in conversion to postfix
-    integer             :: ierr ! Error flag
+    integer             :: evalerr ! Error flag
 
 contains
 
@@ -68,7 +68,7 @@ contains
         ! operand) in postfix order
         type(item) :: x, junk, tok
         integer :: i, icp, insp, isum, ntok
-        ierr = 0
+        evalerr = 0
         token(1:)%char = ' '
 
         if (nparams == 0) then ! Initialize symbol table
@@ -80,7 +80,7 @@ contains
         end if
 
         if (len_trim(expr) == 0) then ! Expression empty
-            ierr = 1
+            evalerr = 1
             write (*, *) 'Error: expression being evaluated is empty'
             return
         end if
@@ -156,7 +156,7 @@ contains
             if (token(i)%type == 'R') isum = isum - 1
         end do
         if (isum /= 0) then
-            ierr = 2
+            evalerr = 2
             write (*, *) 'Error in the evaluation of the expression ', trim(expr)
             write (*, *) "Parentheses don't match"
             write (*, *)
@@ -175,7 +175,7 @@ contains
             select case (x%type)
             case ('E') ! Token is end token
                 if (itop > 1) then
-                    ierr = 12
+                    evalerr = 12
                     write (*, *) 'Error: missing operator in expression ', trim(expr)
                     write (*, *)
                     return
@@ -184,11 +184,11 @@ contains
                 exit
             case ('S') ! Token is operand
                 call valuep(x%char, cval) ! Evaluate operand
-                if (ierr /= 0) return
+                if (evalerr /= 0) return
                 call pushval(cval) ! Put value of operand on stack
             case ('B') ! Token is a binary operator
                 if (itop < 2) then
-                    ierr = 5
+                    evalerr = 5
                     write (*, *) 'Error in evaluation of expression ', trim(expr)
                     write (*, *) 'Less than two operands for binary operator  ' &
                         , trim(x%char)
@@ -204,7 +204,7 @@ contains
                     cval = oper2*oper1
                 case ('/')
                     if (oper1 == (0._r8, 0._r8)) then
-                        ierr = 10
+                        evalerr = 10
                         write (*, *) 'Error in expression ', trim(expr)
                         write (*, *) 'Division by zero'
                         write (*, *)
@@ -219,7 +219,7 @@ contains
                 call pushval(cval) ! Put result back on stack
             case ('U') ! Token is unary operator
                 if (itop == 0) then
-                    ierr = 6
+                    evalerr = 6
                     write (*, *) 'Error in expression ', trim(expr)
                     write (*, *) 'No operand for unary operator ', trim(x%char)
                     write (*, *)
@@ -236,7 +236,7 @@ contains
                 call pushval(cval) ! Put result back on stack
             case ('F') ! Token is a function name
                 if (itop == 0) then
-                    ierr = 7
+                    evalerr = 7
                     write (*, *) 'Error in expression ', trim(expr)
                     write (*, *) 'Missing argument(s) for function ', trim(x%char)
                     write (*, *)
@@ -253,7 +253,7 @@ contains
                 case ('TAN')
                     oper2 = cos(oper1)
                     if (abs(oper2) == 0.0_r8) then
-                        ierr = 14
+                        evalerr = 14
                         write (*, *) 'Error: argument of tan function a multiple', &
                             ' of pi/2 in expression ', trim(expr)
                         write (*, *)
@@ -275,7 +275,7 @@ contains
                     cval = atan(oper1)
                 case ('SQRT')
                     if (real(oper1, r8) < 0. .and. aimag(oper1) == 0.) then
-                        ierr = 9
+                        evalerr = 9
                         write (*, *) 'Warning: square root of negative real number', &
                             ' in expression ', trim(expr)
                         write (*, *)
@@ -285,7 +285,7 @@ contains
                     cval = abs(oper1)
                 case ('LOG')
                     if (real(oper1, r8) <= 0. .and. aimag(oper1) == 0.) then
-                        ierr = 8
+                        evalerr = 8
                         write (*, *) 'Error: negative real or zero argument for', &
                             ' natural logarithm in expression ', trim(expr)
                         write (*, *)
@@ -294,7 +294,7 @@ contains
                     cval = log(oper1)
                 case ('LOG10')
                     if (real(oper1, r8) <= 0. .and. aimag(oper1) == 0.) then
-                        ierr = 8
+                        evalerr = 8
                         write (*, *) 'Error: negative real or zero argument for base', &
                             '10 logarithm in expression ', trim(expr)
                         write (*, *)
@@ -305,7 +305,7 @@ contains
                     cval = exp(oper1)
                 case ('COMPLEX')
                     if (itop == 0) then
-                        ierr = 7
+                        evalerr = 7
                         write (*, *) 'Error in expression ', trim(expr)
                         write (*, *) 'Missing argument(s) for function ', trim(x%char)
                         write (*, *)
@@ -325,7 +325,7 @@ contains
                 case ('IMAG')
                     cval = aimag(oper1)
                 case default ! Undefined function
-                    ierr = 13
+                    evalerr = 13
                     write (*, *) 'Error: the function ', trim(x%char), ' is undefined', &
                         ' in the expression ', trim(expr)
                     write (*, *)
@@ -524,7 +524,7 @@ contains
         character(len_trim(sym)) :: usym
         complex(c8) :: val
         integer :: i
-        ierr = 0
+        evalerr = 0
         if (nparams == 0) then ! Initialize symbol table
             params(1)%symbol = 'PI'
             params(1)%value = (3.14159265358979_r8, 0.0_r8)
@@ -536,7 +536,7 @@ contains
 ! Assign val to sym if sym is already in symbol table
         usym = uppercase(sym)
         if (.not. is_letter(sym(1:1)) .or. len_trim(sym) > 24) then
-            ierr = 11
+            evalerr = 11
             write (*, *) 'Error: symbol ', trim(sym), ' has improper format'
             write (*, *)
             return
@@ -636,7 +636,7 @@ contains
         end if
 
         call evalexpr_c8(expr, val) ! val is value of expression expr
-        if (ierr == 0 .or. ierr == 9) then
+        if (evalerr == 0 .or. evalerr == 9) then
             call valdef_c8(sym, val) ! Assign val to symbol sym
         end if
 
@@ -651,14 +651,14 @@ contains
         complex(c8) :: cval
         real(r8) :: rval
         integer :: ios
-        ierr = 0
+        evalerr = 0
 
         if (is_letter(xinchar(1:1))) then ! xinchar is a symbol
             call getparam(xinchar, cval)
         else ! xinchar is a number string
             call value(xinchar, rval, ios) ! rval is the value of xinchar
             if (ios > 0) then
-                ierr = 3
+                evalerr = 3
                 write (*, *) 'Error: number string ', trim(xinchar), ' does not correspond to a valid number'
                 write (*, *)
             end if
@@ -725,10 +725,10 @@ contains
         character(len_trim(sym)) :: usym
         complex(c8) :: var
         integer :: ifind, j
-        ierr = 0
+        evalerr = 0
         sym = adjustl(sym)
         if (.not. is_letter(sym(1:1)) .or. len_trim(sym) > 24) then
-            ierr = 11
+            evalerr = 11
             write (*, *) 'Error: symbol ', trim(sym), ' has incorrect format'
             write (*, *)
             return
@@ -743,7 +743,7 @@ contains
             end if
         end do
         if (ifind == 0) then
-            ierr = 4
+            evalerr = 4
             write (*, *) 'Error: symbol ', trim(sym), ' not in symbol table'
             write (*, *)
             return
@@ -820,20 +820,6 @@ contains
         ivar = nint(real(vard, r8), i4)
 
     end subroutine getparam_i4
-
-!**********************************************************************
-
-    subroutine evaleqn(eqn) ! Evaluate an equation
-        integer :: nargs
-        character(*) :: eqn
-        character(len(eqn)) :: args(2)
-        complex(c8) :: val
-
-        call parse(eqn, '=', args, nargs) ! Seperate right- and left-hand-sides
-        call defparam(adjustl(args(1)), args(2)) ! Evaluate right-hand-side and
-        ! assign to symbol on the
-        ! left-hand-side.
-    end subroutine evaleqn
 
 !**********************************************************************
 

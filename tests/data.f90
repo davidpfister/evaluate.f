@@ -1,39 +1,39 @@
 module test_data
     use evaluate_kinds
-    
+
     implicit none; private j
-    
+
     integer :: j
-    integer, parameter :: neq = 23 
-        
-    real(r8) :: results(neq)  
-    data(results(j), j=1, neq) / 0.9508_r8, &
-                                0.7958_r8, &
-                                0.2846_r8, &
-                                1.1247_r8, &
-                                0.9177_r8, &
-                                1.0599_r8, &
-                                0.8064_r8, &
-                                3.2193_r8, &
-                                0.9981_r8, &
-                                0.8366_r8, &
-                                0.9441_r8, &
-                                0.1457_r8, &
-                                4.2508_r8, &
-                                1.2064_r8, &
-                                1.2227_r8, &
-                                20.6962_r8, &
-                                112.1323_r8, &
-                                1.5597_r8, &
-                                7.5806_r8, &
-                                1.5574_r8, &
-                                0.8869_r8, &
-                                3.0118_r8, &
-                                1.5311_r8 /
-    
+    integer, parameter :: neq = 23
+
+    real(r8) :: results(neq)
+    data(results(j), j=1, neq)/0.9508_r8, &
+        0.7958_r8, &
+        0.2846_r8, &
+        1.1247_r8, &
+        0.9177_r8, &
+        1.0599_r8, &
+        0.8064_r8, &
+        3.2193_r8, &
+        0.9981_r8, &
+        0.8366_r8, &
+        0.9441_r8, &
+        0.1457_r8, &
+        4.2508_r8, &
+        1.2064_r8, &
+        1.2227_r8, &
+        20.6962_r8, &
+        112.1323_r8, &
+        1.5597_r8, &
+        7.5806_r8, &
+        1.5574_r8, &
+        0.8869_r8, &
+        3.0118_r8, &
+        1.5311_r8/
+
     character(200) :: eqstring(1:neq)
     data(eqstring(j), j=1, neq)/ &
-		'a+b*x1', & 
+        'a+b*x1', &
         '(a*x**b)/(c+x**b)', &
         '(a*x)/(b+(x*(1+x/c)))', &
         'a+b*exp(c*x)+d*exp(e*x)', &
@@ -55,5 +55,5 @@ module test_data
         'atan(sinh(log(abs(exp(z/x)*sqrt(y+a**c+f*e)))))*cos(log(abs(sqrt(y+a**c+f*e))))', &
         'a+b*log(x1)+c*log(x1)**2+d/x2+e/x2**2', &
         '(x+a)/(b+c*(x+a)+d*(x+a)**2)', &
-		'a+b*log(x1)+c*log(x1)**2+d*log(x1)**3+e/x'/
+        'a+b*log(x1)+c*log(x1)**2+d*log(x1)**3+e/x'/
 end module

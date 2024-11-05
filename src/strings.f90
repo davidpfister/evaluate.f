@@ -14,7 +14,7 @@ module evaluate_strings
     !! number. Calling syntax is 'call value(numstring,number,ios)'
     !! where 'numstring' is a number string and 'number' is a
     !! real number or an integer (single or double precision).
-    interface value 
+    interface value
         module procedure value_r8
         module procedure value_r4
         module procedure value_i8
@@ -60,7 +60,7 @@ contains
         character(*):: str
         character(1):: ch
         character(len_trim(str)):: outstr
-        !private 
+        !private
         integer :: i, k, ich, lenstr, isp
 
         str = adjustl(str)
@@ -92,13 +92,13 @@ contains
         str = adjustl(outstr)
     end subroutine
 
-    !> @brief Removes spaces, tabs, control characters in 
+    !> @brief Removes spaces, tabs, control characters in
     !! string str and replace '**' by '^'
     subroutine removesp(str)
         character(*) :: str
         character(1) :: ch
         character(len_trim(str)) :: outstr
-        !private 
+        !private
         integer :: i, k, ich, lenstr
 
         str = adjustl(str)
@@ -152,13 +152,13 @@ contains
         end do
     end function
 
-    !> @brief Converts number string to a double 
+    !> @brief Converts number string to a double
     !! precision real number
     subroutine value_r8(str, rnum, ios)
         character(*) :: str
         real(r8)     :: rnum
         integer      :: ios
-        !private 
+        !private
         integer :: ilen, ipos
 
         ilen = len_trim(str)
@@ -170,7 +170,7 @@ contains
         read (str, *, iostat=ios) rnum
     end subroutine
 
-    !> @brief Converts number string to a 
+    !> @brief Converts number string to a
     !! single precision real number
     subroutine value_r4(str, rnum, ios)
         character(*) :: str
@@ -178,7 +178,7 @@ contains
         real(r8)     :: rnumd
         !private
         integer :: ios
-        
+
         call value_r8(str, rnumd, ios)
         if (abs(rnumd) > huge(rnum)) then
             ios = 15
@@ -188,7 +188,7 @@ contains
         rnum = rnumd
     end subroutine
 
-    !> @brief Converts number string to a 
+    !> @brief Converts number string to a
     !! double precision integer value
     subroutine value_i8(str, inum, ios)
         character(*)::str
@@ -196,7 +196,7 @@ contains
         real(r8) :: rnum
         !private
         integer :: ios
-        
+
         call value_r8(str, rnum, ios)
         if (abs(rnum) > huge(inum)) then
             ios = 15
@@ -205,7 +205,7 @@ contains
         inum = nint(rnum, i8)
     end subroutine
 
-    !> @brief Converts number string to a 
+    !> @brief Converts number string to a
     !! single precision integer value
     subroutine value_i4(str, inum, ios)
         character(*)::str
@@ -213,7 +213,7 @@ contains
         real(r8) :: rnum
         !private
         integer :: ios
-        
+
         call value_r8(str, rnum, ios)
         if (abs(rnum) > huge(inum)) then
             ios = 15
@@ -228,7 +228,7 @@ contains
         character(len_trim(str)) :: ucstr
         !private
         integer :: ilen, ioffset, iquote, iqc, iav, i
-        
+
         ilen = len_trim(str)
         ioffset = iachar('A') - iachar('a')
         iquote = 0
@@ -259,7 +259,7 @@ contains
         character(len_trim(str)) :: lcstr
         !private
         integer :: ilen, ioffset, iquote, i, iav, iqc
-        
+
         ilen = len_trim(str)
         ioffset = iachar('A') - iachar('a')
         iquote = 0
@@ -293,7 +293,7 @@ contains
         !private
         character :: delim1, delim2, ch
         integer :: lenstr, idelim1, idelim2, istart, iend, inc, isum, i
-        
+
         lenstr = len_trim(str)
         delim1 = str(ipos:ipos)
         select case (delim1)
@@ -378,11 +378,11 @@ contains
     subroutine split(str, delims, before, sep)
         character(*) :: str, delims, before
         character, optional :: sep
-        !private 
+        !private
         logical :: pres
         character :: ch, cha
         integer :: lenstr, k, ibsl, i, iposa, ipos
-        
+
         pres = present(sep)
         str = adjustl(str)
         call compact(str)
