@@ -117,7 +117,9 @@ contains
                 outstr(k:k) = ch
             end select
         end do
-        str = replacesp(outstr, '**', '^')
+        if (scan(str, '**') > 0) then
+            str = replacesp(outstr, '**', '^')
+        end if
     end subroutine
 
     pure recursive function replacesp(string, search, substitute) result(modifiedString)

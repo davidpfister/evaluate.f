@@ -1,33 +1,11 @@
-module parameters
-    use, intrinsic :: iso_fortran_env, only: i1 => int8, &
-                                             i2 => int16, &
-                                             i4 => int32, &
-                                             i8 => int64, &
-                                             r4 => real32, &
-                                             r8 => real64, &
-                                             r16 => real128
+module test_data
+    use evaluate_kinds
     
     implicit none; private j
     
-    public :: i1, i2, i4, i8, r4, r8, r16
-    
     integer :: j
     integer, parameter :: neq = 23 
-    
-    real(r8), parameter :: x = 0.175_r8
-    real(r8), parameter :: y = 0.110_r8
-    real(r8), parameter :: z = 0.900_r8
-    
-    real(r8), parameter :: x1 = 0.508_r8
-    real(r8), parameter :: x2 = 30.000_r8
-    
-    real(r8), parameter :: a = 0.900_r8
-    real(r8), parameter :: b = 0.100_r8
-    real(r8), parameter :: c = 0.110_r8
-    real(r8), parameter :: d = 0.120_r8
-    real(r8), parameter :: e = 0.130_r8
-    real(r8), parameter :: f = 0.140_r8
-    
+        
     real(r8) :: results(neq)  
     data(results(j), j=1, neq) / 0.9508_r8, &
                                 0.7958_r8, &

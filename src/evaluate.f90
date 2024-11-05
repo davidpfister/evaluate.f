@@ -7,17 +7,17 @@ module evaluate
     public :: valuep, evalexpr, defparam, evaleqn, getparam, listvar, ierr
 
     type item
-        character(24):: char
+        character(24) :: char
         character :: type
     end type
 
     type param
-        character(24):: symbol
+        character(24) :: symbol
         complex(c8):: value
     end type
 
     interface defparam
-        module procedure strdef ! value given by expression
+        module procedure valdef_char ! value given by expression
         module procedure valdef_c8 ! Double precision complex value
         module procedure valdef_c4 ! Single precision complex value
         module procedure valdef_r8 ! Double precision real value
@@ -53,7 +53,7 @@ module evaluate
 
 contains
 
-    subroutine EVALEXPR_DC(expr, val) ! Evaluate expression expr for
+    subroutine evalexpr_c8(expr, val) ! Evaluate expression expr for
         ! val double precision complex
 
         character(*), intent(in) :: expr
@@ -168,7 +168,9 @@ contains
 !*****************************************************************************
 
         itop = 0
-        do i = 1, ntok
+        i = 0
+        do while (i < ntok)
+            i = i + 1
             x = token(i)
             select case (x%type)
             case ('E') ! Token is end token
@@ -337,7 +339,7 @@ contains
 
 !**********************************************************************
 
-    subroutine GET_NEXT_TOKEN(str, tok, icp, isp)
+    subroutine get_next_token(str, tok, icp, isp)
 
         character(*) :: str
         character :: cop, chtemp
@@ -452,7 +454,7 @@ contains
 
 !**********************************************************************
 
-    subroutine EVALEXPR_SC(expr, val) ! Evaluate expression expr for
+    subroutine evalexpr_c4(expr, val) ! Evaluate expression expr for
         ! val single precision complex
         character(*) :: expr
         complex(c4) :: val
@@ -465,7 +467,7 @@ contains
 
 !**********************************************************************
 
-    subroutine EVALEXPR_SR(expr, val) ! Evaluate expression expr for
+    subroutine evalexpr_r4(expr, val) ! Evaluate expression expr for
         ! val single precision real
         character(*) :: expr
         real(r4) :: val
@@ -478,7 +480,7 @@ contains
 
 !**********************************************************************
 
-    subroutine EVALEXPR_DR(expr, val) ! Evaluate expression expr for
+    subroutine evalexpr_r8(expr, val) ! Evaluate expression expr for
         ! val double precision real
         character(*) :: expr
         real(r8) :: val
@@ -491,7 +493,7 @@ contains
 
 !**********************************************************************
 
-    subroutine EVALEXPR_SI(expr, ival) ! Evaluate expression expr for
+    subroutine evalexpr_i4(expr, ival) ! Evaluate expression expr for
         ! ival single precision integer
         character(*) :: expr
         integer(i4) :: ival
@@ -504,7 +506,7 @@ contains
 
 !**********************************************************************
 
-    subroutine EVALEXPR_DI(expr, ival) ! Evaluate expression expr for
+    subroutine evalexpr_i8(expr, ival) ! Evaluate expression expr for
         ! ival double precision integer
         character(*) :: expr
         integer(i8) :: ival
@@ -516,7 +518,7 @@ contains
     end subroutine evalexpr_i8
 
 !**********************************************************************
-    subroutine VALDEF_DC(sym, val) ! Associates sym with val in symbol table,
+    subroutine valdef_c8(sym, val) ! Associates sym with val in symbol table,
         ! val double precision complex
         character(*) :: sym
         character(len_trim(sym)) :: usym
@@ -554,7 +556,7 @@ contains
 
 !**********************************************************************
 
-    subroutine VALDEF_SC(sym, val) ! Associates sym with val in symbol table,
+    subroutine valdef_c4(sym, val) ! Associates sym with val in symbol table,
         ! val single precision complex
         character(*) :: sym
         complex(c4) :: val
@@ -567,7 +569,7 @@ contains
 
 !**********************************************************************
 
-    subroutine VALDEF_DR(sym, val) ! Associates sym with val in symbol table,
+    subroutine valdef_r8(sym, val) ! Associates sym with val in symbol table,
         ! val double precision real
         character(*) :: sym
         real(r8) :: val
@@ -580,7 +582,7 @@ contains
 
 !**********************************************************************
 
-    subroutine VALDEF_SR(sym, val) ! Associates sym with val in symbol table,
+    subroutine valdef_r4(sym, val) ! Associates sym with val in symbol table,
         ! val single precision real
         character(*) :: sym
         real(r4) :: val
@@ -593,7 +595,7 @@ contains
 
 !**********************************************************************
 
-    subroutine VALDEF_DI(sym, ival) ! Associates sym with ival in symbol table,
+    subroutine valdef_i8(sym, ival) ! Associates sym with ival in symbol table,
         ! ival double precision integer
         character(*) :: sym
         integer(i8) :: ival
@@ -606,7 +608,7 @@ contains
 
 !**********************************************************************
 
-    subroutine VALDEF_SI(sym, ival) ! Associates sym with ival in symbol table,
+    subroutine valdef_i4(sym, ival) ! Associates sym with ival in symbol table,
         ! ival single precision integer
         character(*) :: sym
         integer(i4) :: ival
@@ -619,7 +621,7 @@ contains
 
 !**********************************************************************
 
-    subroutine STRDEF(sym, expr) ! Associates sym with the value of the
+    subroutine valdef_char(sym, expr) ! Associates sym with the value of the
         ! expression expr
 
         character(*) :: sym, expr
@@ -638,11 +640,9 @@ contains
             call valdef_c8(sym, val) ! Assign val to symbol sym
         end if
 
-    end subroutine strdef
+    end subroutine valdef_char
 
-!**********************************************************************
-
-    subroutine VALUEP(xinchar, cval) ! Finds double precision complex value
+    subroutine valuep(xinchar, cval) ! Finds double precision complex value
         ! corresponding to number string xinchar
         ! or value in symbol table corresponding
         ! to symbol name xinchar.
@@ -670,7 +670,7 @@ contains
 
 !**********************************************************************
 
-    subroutine PUSHOP(op) ! Puts an operator on operator stack
+    subroutine pushop(op) ! Puts an operator on operator stack
 
         type(item):: op
 
@@ -684,7 +684,7 @@ contains
 
     end subroutine pushop
 
-    subroutine POPOP(op) ! Takes top operator of operator stack and assigns it to op
+    subroutine popop(op) ! Takes top operator of operator stack and assigns it to op
 
         type(item):: op
 
@@ -693,7 +693,7 @@ contains
 
     end subroutine popop
 
-    subroutine PUSHVAL(val) ! Puts value on value stack
+    subroutine pushval(val) ! Puts value on value stack
 
         complex(c8) :: val
 
@@ -707,7 +707,7 @@ contains
 
     end subroutine pushval
 
-    subroutine POPVAL(val) ! Takes top value off value stack and assigns it to val
+    subroutine popval(val) ! Takes top value off value stack and assigns it to val
 
         complex(c8) :: val
 
@@ -718,7 +718,7 @@ contains
 
 !**********************************************************************
 
-    subroutine GETPARAM_DC(sym, var) ! Find double precision complex value var
+    subroutine getparam_c8(sym, var) ! Find double precision complex value var
         ! corresponding to symbol sym
 
         character(*) :: sym
@@ -753,7 +753,7 @@ contains
 
 !**********************************************************************
 
-    subroutine GETPARAM_SC(sym, var) ! Find single precision complex value var
+    subroutine getparam_c4(sym, var) ! Find single precision complex value var
         ! corresponding to symbol sym
 
         character(*) :: sym
@@ -767,7 +767,7 @@ contains
 
 !**********************************************************************
 
-    subroutine GETPARAM_DR(sym, var) ! Find double precision real value var
+    subroutine getparam_r8(sym, var) ! Find double precision real value var
         ! corresponding to symbol sym
 
         character(*) :: sym
@@ -781,7 +781,7 @@ contains
 
 !**********************************************************************
 
-    subroutine GETPARAM_SR(sym, var) ! Find single precision real value var
+    subroutine getparam_r4(sym, var) ! Find single precision real value var
         ! corresponding to symbol sym
 
         character(*) :: sym
@@ -795,7 +795,7 @@ contains
 
 !**********************************************************************
 
-    subroutine GETPARAM_DI(sym, ivar) ! Find double precision integer value ivar
+    subroutine getparam_i8(sym, ivar) ! Find double precision integer value ivar
         ! corresponding to symbol sym
 
         character(*) :: sym
@@ -809,7 +809,7 @@ contains
 
 !**********************************************************************
 
-    subroutine GETPARAM_SI(sym, ivar) ! Find single precision integer value ivar
+    subroutine getparam_i4(sym, ivar) ! Find single precision integer value ivar
         ! corresponding to symbol sym
 
         character(*) :: sym
@@ -823,7 +823,7 @@ contains
 
 !**********************************************************************
 
-    subroutine EVALEQN(eqn) ! Evaluate an equation
+    subroutine evaleqn(eqn) ! Evaluate an equation
         integer :: nargs
         character(*) :: eqn
         character(len(eqn)) :: args(2)
@@ -837,7 +837,7 @@ contains
 
 !**********************************************************************
 
-    subroutine LISTVAR ! List all variables and their values
+    subroutine listvar() ! List all variables and their values
         integer :: i
         write (*, '(/a)') ' VARIABLE LIST:'
         if (nparams == 0) then ! Initialize symbol table
