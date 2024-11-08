@@ -51,5 +51,5 @@
 	<Files>
 		<File RelativePath=".\evaluate.f90"/>
 		<File RelativePath=".\kinds.f90"/>
-		<File RelativePath=".\strings.f90"/></Files>
+		<File RelativePath=".\value.f90"/></Files>
 	<Globals/></VisualStudioProject>

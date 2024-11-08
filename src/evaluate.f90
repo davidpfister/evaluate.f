@@ -1,10 +1,11 @@
 module evaluate
-    use evaluate_strings
+    use evaluate_value
     use evaluate_kinds
 
     private
 
-    public :: evalexpr, defparam, listvar, evalerr
+    public :: evalexpr, defparam, listvar, evalerr, uppercase
+    public :: i1, i2, i4, i8, r4, r8, r16, c4, c8, c16
 
     type item
         character(24) :: char
@@ -51,11 +52,11 @@ module evaluate
     type(item)          :: opstack(numtok) ! Operator stack used in conversion to postfix
     integer             :: evalerr ! Error flag
 
-contains
-
-    subroutine evalexpr_c8(expr, val) ! Evaluate expression expr for
-        ! val double precision complex
-
+    contains
+    
+    !> @brief Evaluate expression expr for
+    !! val double precision complex
+    subroutine evalexpr_c8(expr, val) 
         character(*), intent(in) :: expr
         complex(c8) :: val
         character(len(expr) + 1) :: tempstr
@@ -88,10 +89,8 @@ contains
         tempstr = adjustl(expr)
         call removesp(tempstr) ! Removes spaces, tabs, and control characters
 
-! ****************************************************************************
-! STEP 1:  Convert string to token array. Each token is either an operator or
-!          an operand. Token array will be in postfix (reverse Polish) order.
-!*****************************************************************************
+        ! STEP 1:  Convert string to token array. Each token is either an operator or
+        !          an operand. Token array will be in postfix (reverse Polish) order.
 
         ntok = 0
         ibin = 0
@@ -335,12 +334,9 @@ contains
             end select
         end do
 
-    end subroutine evalexpr_c8
-
-!**********************************************************************
+    end subroutine
 
     subroutine get_next_token(str, tok, icp, isp)
-
         character(*) :: str
         character :: cop, chtemp
         type(item) :: tok
@@ -449,10 +445,7 @@ contains
                 str = str(ipos:)
             end select
         end select
-
-    end subroutine get_next_token
-
-!**********************************************************************
+    end subroutine
 
     subroutine evalexpr_c4(expr, val) ! Evaluate expression expr for
         ! val single precision complex
@@ -462,10 +455,7 @@ contains
 
         call evalexpr_c8(expr, vald)
         val = vald
-
-    end subroutine evalexpr_c4
-
-!**********************************************************************
+    end subroutine
 
     subroutine evalexpr_r4(expr, val) ! Evaluate expression expr for
         ! val single precision real
@@ -475,10 +465,7 @@ contains
 
         call evalexpr_c8(expr, vald)
         val = real(vald)
-
-    end subroutine evalexpr_r4
-
-!**********************************************************************
+    end subroutine
 
     subroutine evalexpr_r8(expr, val) ! Evaluate expression expr for
         ! val double precision real
@@ -488,10 +475,7 @@ contains
 
         call evalexpr_c8(expr, vald)
         val = real(vald, r8)
-
-    end subroutine evalexpr_r8
-
-!**********************************************************************
+    end subroutine
 
     subroutine evalexpr_i4(expr, ival) ! Evaluate expression expr for
         ! ival single precision integer
@@ -501,10 +485,7 @@ contains
 
         call evalexpr_c8(expr, vald)
         ival = nint(real(vald, r8), i4)
-
-    end subroutine evalexpr_i4
-
-!**********************************************************************
+    end subroutine
 
     subroutine evalexpr_i8(expr, ival) ! Evaluate expression expr for
         ! ival double precision integer
@@ -514,15 +495,28 @@ contains
 
         call evalexpr_c8(expr, vald)
         ival = nint(real(vald, r8), i8)
+    end subroutine
+    
+    !> @brief Returns .true. if ch is a letter and .false. otherwise
+    !! param[in] str character input character
+    !! @returns logical @n@n .true. if the character is a letter, .false. otherwise.
+    pure function is_letter(ch) result(res)
+        character, intent(in)   :: ch
+        logical :: res
 
-    end subroutine evalexpr_i8
+        select case (ch)
+        case ('A':'Z', 'a':'z')
+            res = .true.
+        case default
+            res = .false.
+        end select
+    end function
 
-!**********************************************************************
     subroutine valdef_c8(sym, val) ! Associates sym with val in symbol table,
         ! val double precision complex
-        character(*) :: sym
+        character(*), intent(in) :: sym
+        complex(c8), intent(in) :: val
         character(len_trim(sym)) :: usym
-        complex(c8) :: val
         integer :: i
         evalerr = 0
         if (nparams == 0) then ! Initialize symbol table
@@ -551,80 +545,62 @@ contains
         nparams = nparams + 1 ! Otherwise assign val to new symbol sym
         params(nparams)%symbol = usym
         params(nparams)%value = val
-
-    end subroutine valdef_c8
-
-!**********************************************************************
+    end subroutine
 
     subroutine valdef_c4(sym, val) ! Associates sym with val in symbol table,
         ! val single precision complex
-        character(*) :: sym
-        complex(c4) :: val
+        character(*), intent(in) :: sym
+        complex(c4), intent(in) :: val
         complex(c8) :: vald
 
         vald = val
         call valdef_c8(sym, vald)
-
-    end subroutine valdef_c4
-
-!**********************************************************************
+    end subroutine
 
     subroutine valdef_r8(sym, val) ! Associates sym with val in symbol table,
         ! val double precision real
-        character(*) :: sym
-        real(r8) :: val
+        character(*), intent(in) :: sym
+        real(r8), intent(in) :: val
         complex(c8) :: vald
 
         vald = cmplx(val, 0.0_r8, c8)
         call valdef_c8(sym, vald)
-
-    end subroutine valdef_r8
-
-!**********************************************************************
+    end subroutine
 
     subroutine valdef_r4(sym, val) ! Associates sym with val in symbol table,
         ! val single precision real
-        character(*) :: sym
-        real(r4) :: val
+        character(*), intent(in) :: sym
+        real(r4), intent(in) :: val
         complex(c8) :: vald
 
         vald = cmplx(val, 0.0, c8)
         call valdef_c8(sym, vald)
-
-    end subroutine valdef_r4
-
-!**********************************************************************
+    end subroutine
 
     subroutine valdef_i8(sym, ival) ! Associates sym with ival in symbol table,
         ! ival double precision integer
-        character(*) :: sym
-        integer(i8) :: ival
+        character(*), intent(in) :: sym
+        integer(i8), intent(in) :: ival
         complex(c8) :: vald
 
         vald = cmplx(real(ival, r8), 0.0_r8, c8)
         call valdef_c8(sym, vald)
-
-    end subroutine valdef_i8
-
-!**********************************************************************
+    end subroutine
 
     subroutine valdef_i4(sym, ival) ! Associates sym with ival in symbol table,
         ! ival single precision integer
-        character(*) :: sym
-        integer(i4) :: ival
+        character(*), intent(in) :: sym
+        integer(i4), intent(in) :: ival
         complex(c8) :: vald
 
         vald = cmplx(real(ival, r8), 0.0, c8)
         call valdef_c8(sym, vald)
-
-    end subroutine valdef_i4
-
-!**********************************************************************
+    end subroutine
 
     subroutine valdef_char(sym, expr) ! Associates sym with the value of the
         ! expression expr
 
-        character(*) :: sym, expr
+        character(*), intent(in) :: sym, expr
         complex(c8) :: val
 
         if (nparams == 0) then ! Initialize symbol table
@@ -639,8 +615,7 @@ contains
         if (evalerr == 0 .or. evalerr == 9) then
             call valdef_c8(sym, val) ! Assign val to symbol sym
         end if
-
-    end subroutine valdef_char
+    end subroutine
 
     subroutine valuep(xinchar, cval) ! Finds double precision complex value
         ! corresponding to number string xinchar
@@ -665,13 +640,9 @@ contains
             cval = cmplx(rval, 0.0_r8, c8)
             return
         end if
-
-    end subroutine valuep
-
-!**********************************************************************
+    end subroutine
 
     subroutine pushop(op) ! Puts an operator on operator stack
-
         type(item):: op
 
         itop = itop + 1
@@ -681,8 +652,7 @@ contains
             return
         end if
         opstack(itop) = op
-
-    end subroutine pushop
+    end subroutine
 
     subroutine popop(op) ! Takes top operator of operator stack and assigns it to op
 
@@ -690,11 +660,9 @@ contains
 
         op = opstack(itop)
         itop = itop - 1
-
-    end subroutine popop
+    end subroutine
 
     subroutine pushval(val) ! Puts value on value stack
-
         complex(c8) :: val
 
         itop = itop + 1
@@ -704,8 +672,7 @@ contains
             return
         end if
         valstack(itop) = val
-
-    end subroutine pushval
+    end subroutine
 
     subroutine popval(val) ! Takes top value off value stack and assigns it to val
 
@@ -714,9 +681,7 @@ contains
         val = valstack(itop)
         itop = itop - 1
 
-    end subroutine popval
-
-!**********************************************************************
+    end subroutine
 
     subroutine getparam_c8(sym, var) ! Find double precision complex value var
         ! corresponding to symbol sym
@@ -748,10 +713,7 @@ contains
             write (*, *)
             return
         end if
-
-    end subroutine getparam_c8
-
-!**********************************************************************
+    end subroutine
 
     subroutine getparam_c4(sym, var) ! Find single precision complex value var
         ! corresponding to symbol sym
@@ -762,10 +724,7 @@ contains
 
         call getparam_c8(sym, vard)
         var = vard
-
-    end subroutine getparam_c4
-
-!**********************************************************************
+    end subroutine
 
     subroutine getparam_r8(sym, var) ! Find double precision real value var
         ! corresponding to symbol sym
@@ -776,10 +735,7 @@ contains
 
         call getparam_c8(sym, vard)
         var = real(vard, r8)
-
-    end subroutine getparam_r8
-
-!**********************************************************************
+    end subroutine
 
     subroutine getparam_r4(sym, var) ! Find single precision real value var
         ! corresponding to symbol sym
@@ -790,10 +746,7 @@ contains
 
         call getparam_c8(sym, vard)
         var = real(vard)
-
-    end subroutine getparam_r4
-
-!**********************************************************************
+    end subroutine
 
     subroutine getparam_i8(sym, ivar) ! Find double precision integer value ivar
         ! corresponding to symbol sym
@@ -804,10 +757,7 @@ contains
 
         call getparam_c8(sym, vard)
         ivar = nint(real(vard, r8), i8)
-
-    end subroutine getparam_i8
-
-!**********************************************************************
+    end subroutine
 
     subroutine getparam_i4(sym, ivar) ! Find single precision integer value ivar
         ! corresponding to symbol sym
@@ -818,10 +768,7 @@ contains
 
         call getparam_c8(sym, vard)
         ivar = nint(real(vard, r8), i4)
-
-    end subroutine getparam_i4
-
-!**********************************************************************
+    end subroutine
 
     subroutine listvar() ! List all variables and their values
         integer :: i
@@ -836,6 +783,97 @@ contains
         do i = 1, nparams
             write (*, *) trim(params(i)%symbol), ' = ', params(i)%value
         end do
-
     end subroutine
+    
+    !> @brief Removes spaces, tabs, control characters in
+    !! string str and replace '**' by '^'
+    subroutine removesp(str)
+        character(*)                :: str
+        !private
+        character(1) :: ch
+        character(len_trim(str)) :: outstr
+        integer :: i, k, ich, lenstr
+
+        str = adjustl(str)
+        lenstr = len_trim(str)
+        outstr = ' '
+        k = 0
+
+        do i = 1, lenstr
+            ch = str(i:i)
+            ich = iachar(ch)
+            select case (ich)
+            case (0:32) ! space, tab, or control character
+                cycle
+            case (33:)
+                k = k + 1
+                outstr(k:k) = ch
+            end select
+        end do
+        str = replacestr(outstr, '**', '^')
+    contains
+        pure recursive function replacestr(string, search, substitute) result(outstr)
+            character(*), intent(in)        :: string, search, substitute
+            character(:), allocatable       :: outstr
+            !private
+            integer :: i, lenstr, lensearch
+
+            lenstr = len(string)
+            lensearch = len(search)
+            if (lenstr == 0 .or. lensearch == 0) then
+                outstr = ''
+                return
+            elseif (lenstr < lensearch) then
+                outstr = string
+                return
+            end if
+            i = 1
+            do
+                if (string(i:i + lensearch - 1) == search) then
+                    outstr = string(1:i - 1)//substitute//&
+                        replacestr(string(i + lensearch:lenstr), search, substitute)
+                    exit
+                end if
+                if (i + lensearch > lenstr) then
+                    outstr = string
+                    exit
+                end if
+                i = i + 1
+                cycle
+            end do
+        end function
+    end subroutine
+    
+    !> @brief convert string to upper case
+    !! param[in] str character(*) input string
+    !! @returns character(:), allocatable @n@n A string with uppercase characters.
+    pure function uppercase(str) result(ucstr)
+        character(*), intent(in) :: str
+        character(len_trim(str)) :: ucstr
+        !private
+        integer :: ilen, ioffset, iquote, iqc, iav, i
+
+        ilen = len_trim(str)
+        ioffset = iachar('A') - iachar('a')
+        iquote = 0
+        ucstr = str
+        do i = 1, ilen
+            iav = iachar(str(i:i))
+            if (iquote == 0 .and. (iav == 34 .or. iav == 39)) then
+                iquote = 1
+                iqc = iav
+                cycle
+            end if
+            if (iquote == 1 .and. iav == iqc) then
+                iquote = 0
+                cycle
+            end if
+            if (iquote == 1) cycle
+            if (iav >= iachar('a') .and. iav <= iachar('z')) then
+                ucstr(i:i) = achar(iav + ioffset)
+            else
+                ucstr(i:i) = str(i:i)
+            end if
+        end do
+    end function
 end module

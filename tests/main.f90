@@ -5,8 +5,6 @@ TEST(evaluate_tests)
 use test_data
 use evaluate
 
-character(*), dimension(11), parameter :: var = ['x ', 'y ', 'z ', 'x1', 'x2', &
-                                                 'a ', 'b ', 'c ', 'd ', 'e ', 'f ']
 double precision :: val
 integer :: i
 
