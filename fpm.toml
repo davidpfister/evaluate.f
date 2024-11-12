@@ -17,3 +17,8 @@ library = false
 name = "test"
 source-dir = "tests"
 main="main.f90"
+
+[[example]]
+name = "calc"
+source-dir = "examples/calc"
+main = "calc.f90"

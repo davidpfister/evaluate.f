@@ -49,7 +49,10 @@
 				<Tool Name="VFPostBuildEventTool"/>
 				<Tool Name="VFManifestTool" SuppressStartupBanner="true"/></Configuration></Configurations>
 	<Files>
-		<File RelativePath=".\evaluate.f90"/>
-		<File RelativePath=".\kinds.f90"/>
-		<File RelativePath=".\value.f90"/></Files>
+		<File RelativePath=".\Evaluate.f90"/>
+		<File RelativePath=".\Kinds.f90"/>
+		<File RelativePath=".\Parameters.f90"/>
+		<File RelativePath=".\Stacks.f90"/>
+		<File RelativePath=".\String.f90"/>
+		<File RelativePath=".\Value.f90"/></Files>
 	<Globals/></VisualStudioProject>

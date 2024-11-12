@@ -1,3 +1,20 @@
+!> @defgroup group_value evaluate_value
+!> @brief Generic interface for converting a string to a
+!! number.
+!! @par
+!! <h2>Examples</h2>
+!! The following example demonstrates some of the methods found in the 
+!! @link evaluate_value evaluate_value @endlink module.
+!!
+!! @code
+!! character(:), allocatable :: numstring
+!! integer :: number, ios
+!! 
+!! numstring = '3'
+!! call value(numstring, number, ios)
+!! if (ios /= 0) print*, 'error: ', ios
+!! @endcode
+!! @{
 module evaluate_value
     use evaluate_kinds
 
@@ -5,10 +22,7 @@ module evaluate_value
 
     public :: value
 
-    !> @brief Generic operator for converting a string to a
-    !! number. Calling syntax is 'call value(numstring,number,ios)'
-    !! where 'numstring' is a number string and 'number' is a
-    !! real number or an integer (single or double precision).
+    !> @brief   Converts number string to a number
     interface value
         module procedure value_r8
         module procedure value_r4
@@ -18,10 +32,9 @@ module evaluate_value
 
     contains
 
-    !> @brief Converts number string to a double
-    !! precision real number
+    !> @brief   Converts number string to a number
     !! param[in] str character(*) input string
-    !! param[out] rnum real(r8) output value
+    !! param[out] rnum numeric output value as real(r8)
     !! param[out] ios integer error code
     subroutine value_r8(str, rnum, ios)
         character(*), intent(in)    :: str
@@ -39,10 +52,9 @@ module evaluate_value
         read (str, *, iostat=ios) rnum
     end subroutine
 
-    !> @brief Converts number string to a
-    !! single precision real number
+    !> @brief   Converts number string to a number
     !! param[in] str character(*) input string
-    !! param[out] rnum real(r4) output value
+    !! param[out] rnum numeric output value as real(r4)
     !! param[out] ios integer error code
     subroutine value_r4(str, rnum, ios)
         character(*), intent(in)    :: str
@@ -60,10 +72,9 @@ module evaluate_value
         rnum = rnumd
     end subroutine
 
-    !> @brief Converts number string to a
-    !! double precision integer value
+    !> @brief   Converts number string to a number
     !! param[in] str character(*) input string
-    !! param[out] inum integer(i8) output value
+    !! param[out] rnum numeric output value as integer(i8)
     !! param[out] ios integer error code
     subroutine value_i8(str, inum, ios)
         character(*), intent(in)    :: str
@@ -80,10 +91,9 @@ module evaluate_value
         inum = nint(rnum, i8)
     end subroutine
 
-    !> @brief Converts number string to a
-    !! single precision integer value
+    !> @brief   Converts number string to a number
     !! param[in] str character(*) input string
-    !! param[out] inum integer(i8) output value
+    !! param[out] rnum numeric output value as integer(i4)
     !! param[out] ios integer error code
     subroutine value_i4(str, inum, ios)
         character(*), intent(in)    :: str
@@ -115,4 +125,4 @@ module evaluate_value
         end select
     end function
 end module
-
+!! @}

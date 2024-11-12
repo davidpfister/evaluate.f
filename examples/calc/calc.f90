@@ -1,12 +1,11 @@
-program calc ! Command line complex calculator
+ program calc ! Command line complex calculator
     use evaluate
 
     character(len=132) :: str, line, ustr
     character(len=24) :: varname
     complex(c8) :: valcd
-    integer :: lstr, ipos
+    integer :: lstr, ipos, ierr
 
-    evalerr = 0
     write (*, *)
     write (*, *) '   Welcome to the command line complex calculator. '
     write (*, *) '   The program can be exited at any time by hitting'
@@ -17,6 +16,7 @@ program calc ! Command line complex calculator
     do
         write (*, '(/a)', advance='no') ' >> ' ! Command line prompt
         read (*, '(a)') str
+        
         ustr = uppercase(str)
         lstr = len_trim(str)
         if (lstr == 0) exit
@@ -48,11 +48,15 @@ program calc ! Command line complex calculator
             &    '*********************'/)")
                 cycle
             end if
+            
+            if (str == 'QUIT') then
+                exit
+            end if
         end associate
         ipos = index(str, '=')
         if (ipos == 0) then
-            call evalexpr(str, valcd) ! Evaluate expression
-            if (evalerr == 0 .or. evalerr == 9) then
+            call eval(str, valcd, ierr) ! Evaluate expression
+            if (ierr == 0 .or. ierr == 9) then
                 call defparam('result', valcd) ! Make result a stored variable
                 if (aimag(valcd) == 0.) then
                     write (*, *)
@@ -163,7 +167,7 @@ program calc ! Command line complex calculator
     pure subroutine removebksl(str)
         character(*), intent(inout)    :: str
         !private
-        character(1)    :: ch
+        character(1) :: ch
         integer :: i, k, ibsl, lenstr
         character(len_trim(str))::outstr
 

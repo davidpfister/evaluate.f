@@ -39,7 +39,7 @@ Example expression:
 ```
          conjg(((cos(x) + sqrt(a+i*b))^2+complex(ln(1.6e-4),20))/2)
 ```
-An equation of the form <symbol> = <expression> can be evaluated using the
+An equation of the form 'symbol = expression' can be evaluated using the
 subroutine evaleqn. The calling syntax is
 ```
          call evaleqn(eqn)
