@@ -9,7 +9,7 @@ module evaluate_parameters
     
     !> @class param
     !! @ingroup group_parameters
-    !> @brief Provides a simple class for describing equation parameters.
+    !! @brief Provides a simple class for describing equation parameters.
     !! @verbatim type, private :: param @endverbatim
     !! <h2>Examples</h2>
     !! The following example demonstrates some of the main members of the 
@@ -20,7 +20,6 @@ module evaluate_parameters
     !! params(2)%symbol = 'I'
     !! params(2)%value = (0.0_r8, 1.0_r8)
     !! @n
-    !! <h2>Remarks</h2>
     !! @par
     !! <h2>Constructors</h2>
     !! Initializes a new instance of the @link evaluate_parameters::param param @endlink class
@@ -36,8 +35,7 @@ module evaluate_parameters
     !!  p = param('x', (0.0_r8, 0.0_r8))
     !! @endcode
     !! @b Remarks
-    type :: param
-        private
+    type, public :: param
         character(24)   :: symbol
         complex(c8)     :: value
     end type
@@ -60,6 +58,7 @@ module evaluate_parameters
     
     !> @brief   Associates sym with val in symbol table,
     !!          val double precision complex
+    !! @ingroup group_parameters
     !! @param[in] sym parameter symbol
     !! @param[in] val parameter value as double precision complex
     !! @param[out] ierr error code
@@ -117,6 +116,7 @@ module evaluate_parameters
 
     !> @brief   Associates sym with val in symbol table,
     !!          val single precision complex
+    !! @ingroup group_parameters
     !! @param[in] sym parameter symbol
     !! @param[in] val parameter value as single precision complex
     !! @param[out] ierr error code
@@ -133,6 +133,7 @@ module evaluate_parameters
 
     !> @brief   Associates sym with val in symbol table,
     !!          val double precision real
+    !! @ingroup group_parameters
     !! @param[in] sym parameter symbol
     !! @param[in] val parameter value as double precision real
     !! @param[out] ierr error code
@@ -149,6 +150,7 @@ module evaluate_parameters
 
     !> @brief   Associates sym with val in symbol table,
     !!          val single precision real
+    !! @ingroup group_parameters
     !! @param[in] sym parameter symbol
     !! @param[in] val parameter value as single precision real
     !! @param[out] ierr error code
@@ -165,6 +167,7 @@ module evaluate_parameters
 
     !> @brief   Associates sym with val in symbol table,
     !!          val double precision integer
+    !! @ingroup group_parameters
     !! @param[in] sym parameter symbol
     !! @param[in] val parameter value as double precision integer
     !! @param[out] ierr error code
@@ -181,6 +184,7 @@ module evaluate_parameters
 
     !> @brief   Associates sym with val in symbol table,
     !!          val single precision integer
+    !! @ingroup group_parameters
     !! @param[in] sym parameter symbol
     !! @param[in] val parameter value as single precision integer
     !! @param[out] ierr error code
@@ -197,6 +201,7 @@ module evaluate_parameters
     
     !> @brief   Find double precision complex value var
     !!          corresponding to symbol sym
+    !! @ingroup group_parameters
     !! @param[inout] sym parameter symbol
     !! @param[out] val parameter value as single precision integer
     !! @param[out] ierr error code
@@ -239,6 +244,7 @@ module evaluate_parameters
     !!          corresponding to number string xinchar
     !!          or value in symbol table corresponding
     !!          to symbol name xinchar.
+    !! @ingroup group_parameters
     !! @param[inout] xinchar input string
     !! @param[out] cval parameter value as double precision complex
     !! @param[out] ierr error code

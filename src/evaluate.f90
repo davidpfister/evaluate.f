@@ -1,3 +1,6 @@
+!> @defgroup group_evaluate evaluate
+!> @brief Evaluate module
+!! @{
 module evaluate
     use evaluate_value
     use evaluate_kinds
@@ -10,16 +13,24 @@ module evaluate
     public :: eval, defparam, listvar, uppercase
     public :: i1, i2, i4, i8, r4, r8, r16, c4, c8, c16
 
+    !> @brief Evaluate expression expr for
+    !! val numerics
+    !! @interface eval
     interface eval
+    !! @cond
         module procedure eval_c8 ! Double precision complex result
         module procedure eval_c4 ! Single precision complex result
         module procedure eval_r8 ! Double precision real result
         module procedure eval_r4 ! Single precision real result
         module procedure eval_i8 ! Double precision integer result
         module procedure eval_i4 ! Single precision integer result
+    !! @endcond
     end interface
     
+    !> @brief defparam
+    !! @interface defparam
     interface defparam
+    !! @cond
         module procedure defparam_char ! value given by expression
         module procedure defparam_c8 ! Double precision complex value
         module procedure defparam_c4 ! Single precision complex value
@@ -27,6 +38,7 @@ module evaluate
         module procedure defparam_r4 ! Single precision real value
         module procedure defparam_i8 ! Double precision integer value
         module procedure defparam_i4 ! Single precision integer value
+    !! @endcond
     end interface
 
     contains
@@ -388,6 +400,7 @@ module evaluate
         end if
     end subroutine
         
+    !! @private
     subroutine get_next_token(str, tok, icp, isp)
         character(*) :: str
         character :: cop, chtemp
@@ -559,3 +572,4 @@ module evaluate
     end subroutine
 
 end module
+!! @}
