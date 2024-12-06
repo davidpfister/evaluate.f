@@ -1,18 +1,20 @@
 !> @defgroup group_value evaluate_value
 !> @brief Generic interface for converting a string to a
-!! number.
+!! number. The interface works for integer values (single and double) and
+!! real (single and double).
 !! @par
 !! <h2>Examples</h2>
 !! The following example demonstrates some of the methods found in the 
 !! @link evaluate_value evaluate_value @endlink module.
 !!
 !! @code
-!! character(:), allocatable :: numstring
-!! integer :: number, ios
+!! character(:), allocatable  :: numstring
+!! integer                            :: val, ios
 !! 
 !! numstring = '3'
-!! call value(numstring, number, ios)
+!! call value(numstring, val, ios)
 !! if (ios /= 0) print*, 'error: ', ios
+!! !val equals 3
 !! @endcode
 !! @{
 module evaluate_value
@@ -20,22 +22,25 @@ module evaluate_value
 
     implicit none; private
 
-    public :: value
+    public :: value, is_digit
 
-    !> @brief   Converts number string to a number
+    !> @interface value
+    !> @brief Converts  string to a number
     interface value
         module procedure value_r8
         module procedure value_r4
         module procedure value_i8
         module procedure value_i4
     end interface
-
+    
     contains
 
-    !> @brief   Converts number string to a number
-    !! param[in] str character(*) input string
-    !! param[out] rnum numeric output value as real(r8)
-    !! param[out] ios integer error code
+    !> @brief Converts  string to a real(8) number
+    !! @param[in] str character(*) input string
+    !! @param[out] rnum numeric output value as real(r8)
+    !! @param[out] ios integer error code
+    !! @n@n
+    !! @b Remarks
     subroutine value_r8(str, rnum, ios)
         character(*), intent(in)    :: str
         real(r8), intent(out)       :: rnum
@@ -52,10 +57,12 @@ module evaluate_value
         read (str, *, iostat=ios) rnum
     end subroutine
 
-    !> @brief   Converts number string to a number
-    !! param[in] str character(*) input string
-    !! param[out] rnum numeric output value as real(r4)
-    !! param[out] ios integer error code
+    !> @brief Converts a string to a real(4) number
+    !! @param[in] str character(*) input string
+    !! @param[out] rnum numeric output value as real(r4)
+    !! @param[out] ios integer error code
+    !! @n@n
+    !! @b Remarks
     subroutine value_r4(str, rnum, ios)
         character(*), intent(in)    :: str
         real(r4), intent(out)       :: rnum
@@ -72,10 +79,12 @@ module evaluate_value
         rnum = rnumd
     end subroutine
 
-    !> @brief   Converts number string to a number
-    !! param[in] str character(*) input string
-    !! param[out] rnum numeric output value as integer(i8)
-    !! param[out] ios integer error code
+    !> @brief Converts a string to an integer(8) number
+    !! @param[in] str character(*) input string
+    !! @param[out] inum numeric output value as integer(i8)
+    !! @param[out] ios integer error code
+    !! @n@n
+    !! @b Remarks
     subroutine value_i8(str, inum, ios)
         character(*), intent(in)    :: str
         integer(i8), intent(out)    :: inum
@@ -91,10 +100,12 @@ module evaluate_value
         inum = nint(rnum, i8)
     end subroutine
 
-    !> @brief   Converts number string to a number
-    !! param[in] str character(*) input string
-    !! param[out] rnum numeric output value as integer(i4)
-    !! param[out] ios integer error code
+    !> @brief Converts a string to an integer(4) number
+    !! @param[in] str character(*) input string
+    !! @param[out] inum numeric output value as integer(i4)
+    !! @param[out] ios integer error code
+    !! @n@n
+    !! @b Remarks
     subroutine value_i4(str, inum, ios)
         character(*), intent(in)    :: str
         integer(i4), intent(out)    :: inum
@@ -111,10 +122,12 @@ module evaluate_value
     end subroutine
 
     !> @brief Returns .true. if ch is a digit (0,1,...,9) and .false. otherwise
-    !! param[in] str character input character
-    !! @returns logical @n@n .true. if the character is a digit, .false. otherwise.
+    !! @param[in] str character input character
+    !! @returns logical, .true. if the character is a digit, .false. otherwise.
+    !! @n@n
+    !! @b Remarks
     pure function is_digit(ch) result(res)
-        character, intent(in) :: ch
+        character(1), intent(in) :: ch
         logical :: res
 
         select case (ch)
