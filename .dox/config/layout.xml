@@ -53,7 +53,7 @@
       <privatestaticattributes title=""/>
       <friends title=""/>
       <related title="" subtitle="" visible=""/>
-      <membergroups visible="yes"/>
+      <membergroups visible="yes" title=""/>
       <nestedclasses visible="yes" title=""/>
     </memberdecl>
     <memberdef>
