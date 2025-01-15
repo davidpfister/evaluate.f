@@ -13,9 +13,9 @@ module evaluate
     public :: eval, defparam, listvar, uppercase
     public :: i1, i2, i4, i8, r4, r8, r16, c4, c8, c16
 
+    !> @interface eval
     !> @brief Evaluate expression expr for
     !! val numerics
-    !! @interface eval
     interface eval
     !! @cond
         module procedure eval_c8 ! Double precision complex result
@@ -27,8 +27,13 @@ module evaluate
     !! @endcond
     end interface
     
-    !> @brief defparam
-    !! @interface defparam
+    !> @interface defparam
+    !> @brief Associates sym with val in symbol table,
+    !!        val double precision complex
+    !! @verbatim defparam(sym, val, ierr) @endverbatim
+    !! @param[in] sym parameter symbol
+    !! @param[in] val parameter value
+    !! @param[out] ierr error code
     interface defparam
     !! @cond
         module procedure defparam_char ! value given by expression

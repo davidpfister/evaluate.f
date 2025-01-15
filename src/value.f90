@@ -1,5 +1,5 @@
 !> @defgroup group_value evaluate_value
-!> @brief Generic interface for converting a string to a
+!> @brief   Generic interface for converting a string to a
 !! number. The interface works for integer values (single and double) and
 !! real (single and double).
 !! @par
@@ -26,21 +26,55 @@ module evaluate_value
 
     !> @interface value
     !> @brief Converts  string to a number
+    !! @par
+    !! <h2>Methods</h2>
+    !! <h3>value(character(*) str, real(r8) rnum, integer ios)</h3>
+    !! 
+    !! @param[in] str input string
+    !! @param[out] rnum numeric output value as real(r8)
+    !! @param[out] (optional) ios integer error code
+    !! 
+    !! <h2> </h2>
+    !! <h3>value(character(*) str, real(r4) rnum, integer ios)</h3>
+    !! 
+    !! @param[in] str input string
+    !! @param[out] rnum numeric output value as real(r4)
+    !! @param[out] (optional) ios integer error code
+    !!
+    !! <h2> </h2>
+    !! <h3>value(character(*) str, integer(i8) inum, integer ios)</h3>
+    !! 
+    !! @param[in] str input string
+    !! @param[out] inum numeric output value as integer(i8)
+    !! @param[out] (optional) ios integer error code
+    !!
+    !! <h2> </h2> 
+    !! <h3>value(character(*) str, integer(i4) inum, integer ios)</h3>
+    !! 
+    !! @param[in] str input string
+    !! @param[out] inum numeric output value as integer(i4)
+    !! @param[out] (optional) ios integer error code
+    !!
+    !! @b Examples
+    !! @code{.f90}
+    !!  real(r8) :: p
+    !!  integer :: ios
+    !!
+    !!  call value('PI', p, ios)
+    !!  ! p = 3.14159265358979_r8
+    !! @endcode
+    !! @b Remarks
     interface value
+    !! @cond
         module procedure value_r8
         module procedure value_r4
         module procedure value_i8
         module procedure value_i4
+    !! @endcond
     end interface
     
     contains
-
-    !> @brief Converts  string to a real(8) number
-    !! @param[in] str character(*) input string
-    !! @param[out] rnum numeric output value as real(r8)
-    !! @param[out] ios integer error code
-    !! @n@n
-    !! @b Remarks
+    
     subroutine value_r8(str, rnum, ios)
         character(*), intent(in)    :: str
         real(r8), intent(out)       :: rnum
@@ -57,12 +91,6 @@ module evaluate_value
         read (str, *, iostat=ios) rnum
     end subroutine
 
-    !> @brief Converts a string to a real(4) number
-    !! @param[in] str character(*) input string
-    !! @param[out] rnum numeric output value as real(r4)
-    !! @param[out] ios integer error code
-    !! @n@n
-    !! @b Remarks
     subroutine value_r4(str, rnum, ios)
         character(*), intent(in)    :: str
         real(r4), intent(out)       :: rnum
@@ -79,12 +107,6 @@ module evaluate_value
         rnum = rnumd
     end subroutine
 
-    !> @brief Converts a string to an integer(8) number
-    !! @param[in] str character(*) input string
-    !! @param[out] inum numeric output value as integer(i8)
-    !! @param[out] ios integer error code
-    !! @n@n
-    !! @b Remarks
     subroutine value_i8(str, inum, ios)
         character(*), intent(in)    :: str
         integer(i8), intent(out)    :: inum
@@ -100,12 +122,6 @@ module evaluate_value
         inum = nint(rnum, i8)
     end subroutine
 
-    !> @brief Converts a string to an integer(4) number
-    !! @param[in] str character(*) input string
-    !! @param[out] inum numeric output value as integer(i4)
-    !! @param[out] ios integer error code
-    !! @n@n
-    !! @b Remarks
     subroutine value_i4(str, inum, ios)
         character(*), intent(in)    :: str
         integer(i4), intent(out)    :: inum
@@ -121,9 +137,10 @@ module evaluate_value
         inum = nint(rnum, i4)
     end subroutine
 
-    !> @brief Returns .true. if ch is a digit (0,1,...,9) and .false. otherwise
-    !! @param[in] str character input character
-    !! @returns logical, .true. if the character is a digit, .false. otherwise.
+    !> @brief   Check is a character is a digit.
+    !! @param[in] ch input character
+    !! @returns 
+    !! logical. `.true.` if the character is a digit (0,1,...,9), `.false.` otherwise.
     !! @n@n
     !! @b Remarks
     pure function is_digit(ch) result(res)

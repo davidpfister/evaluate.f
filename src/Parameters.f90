@@ -9,22 +9,22 @@ module evaluate_parameters
     
     !> @class param
     !! @ingroup group_parameters
-    !! @brief Provides a simple class for describing equation parameters.
+    !! @brief   Provides a simple class for describing equation parameters.
     !! @verbatim type, private :: param @endverbatim
     !! <h2>Examples</h2>
     !! The following example demonstrates some of the main members of the 
     !! @link evaluate_parameters::param param @endlink class.
     !! @n
+    !! @code
     !! params(1)%symbol = 'PI'
-    !! params(1)%value = (3.14159265358979_r8, 0.0_r8)
+    !! params(1)%val = (3.14159265358979_r8, 0.0_r8)
     !! params(2)%symbol = 'I'
-    !! params(2)%value = (0.0_r8, 1.0_r8)
-    !! @n
+    !! params(2)%val = (0.0_r8, 1.0_r8)
+    !! @endcode
     !! @par
     !! <h2>Constructors</h2>
     !! Initializes a new instance of the @link evaluate_parameters::param param @endlink class
-    !! <h3>param(character(24), complex(c8))</h3>
-    !! @verbatim type(param) function param(character(24) symbol, complex(c8) value)@endverbatim
+    !! <h3>param(character(24) symbol, complex(c8) val)</h3>
     !! 
     !! @param[in] symbol the name of the parameter
     !! @param[in] value the value of the parameter as complex(c8)
@@ -36,8 +36,10 @@ module evaluate_parameters
     !! @endcode
     !! @b Remarks
     type, public :: param
+    !! @cond
         character(24)   :: symbol
-        complex(c8)     :: value
+        complex(c8)     :: val
+    !! @endcond
     end type
     
     integer                  :: nparams = 0, lbuffer = 100
@@ -56,14 +58,6 @@ module evaluate_parameters
     
     contains
     
-    !> @brief   Associates sym with val in symbol table,
-    !!          val double precision complex
-    !! @ingroup group_parameters
-    !! @param[in] sym parameter symbol
-    !! @param[in] val parameter value as double precision complex
-    !! @param[out] ierr error code
-    !!
-    !! @b Remarks
     subroutine defparam_c8(sym, val, ierr)   
         character(*), intent(in)        :: sym
         complex(c8), intent(in)         :: val
@@ -85,7 +79,7 @@ module evaluate_parameters
         end if
         do i = 1, nparams
             if (trim(usym) == trim(params(i)%symbol)) then
-                params(i)%value = val
+                params(i)%val = val
                 return
             end if
         end do
@@ -98,7 +92,7 @@ module evaluate_parameters
             if (nparams < size(params)) then
                 nparams = nparams + 1 ! Otherwise assign val to new symbol sym
                 params(nparams)%symbol = sym
-                params(nparams)%value = val
+                params(nparams)%val = val
             else
                 block
                     type(param), allocatable :: temp(:)
@@ -108,20 +102,12 @@ module evaluate_parameters
                     
                     nparams = nparams + 1
                     params(nparams)%symbol = sym
-                    params(nparams)%value = val
+                    params(nparams)%val = val
                 end block
             end if
         end subroutine
     end subroutine
 
-    !> @brief   Associates sym with val in symbol table,
-    !!          val single precision complex
-    !! @ingroup group_parameters
-    !! @param[in] sym parameter symbol
-    !! @param[in] val parameter value as single precision complex
-    !! @param[out] ierr error code
-    !!
-    !! @b Remarks
     subroutine defparam_c4(sym, val)
         character(*), intent(in) :: sym
         complex(c4), intent(in) :: val
@@ -131,14 +117,6 @@ module evaluate_parameters
         call defparam_c8(sym, vald)
     end subroutine
 
-    !> @brief   Associates sym with val in symbol table,
-    !!          val double precision real
-    !! @ingroup group_parameters
-    !! @param[in] sym parameter symbol
-    !! @param[in] val parameter value as double precision real
-    !! @param[out] ierr error code
-    !!
-    !! @b Remarks
     subroutine defparam_r8(sym, val)
         character(*), intent(in) :: sym
         real(r8), intent(in) :: val
@@ -148,14 +126,6 @@ module evaluate_parameters
         call defparam_c8(sym, vald)
     end subroutine
 
-    !> @brief   Associates sym with val in symbol table,
-    !!          val single precision real
-    !! @ingroup group_parameters
-    !! @param[in] sym parameter symbol
-    !! @param[in] val parameter value as single precision real
-    !! @param[out] ierr error code
-    !!
-    !! @b Remarks
     subroutine defparam_r4(sym, val)
         character(*), intent(in) :: sym
         real(r4), intent(in) :: val
@@ -165,14 +135,6 @@ module evaluate_parameters
         call defparam_c8(sym, vald)
     end subroutine
 
-    !> @brief   Associates sym with val in symbol table,
-    !!          val double precision integer
-    !! @ingroup group_parameters
-    !! @param[in] sym parameter symbol
-    !! @param[in] val parameter value as double precision integer
-    !! @param[out] ierr error code
-    !!
-    !! @b Remarks
     subroutine defparam_i8(sym, ival)
         character(*), intent(in) :: sym
         integer(i8), intent(in) :: ival
@@ -182,14 +144,6 @@ module evaluate_parameters
         call defparam_c8(sym, vald)
     end subroutine
 
-    !> @brief   Associates sym with val in symbol table,
-    !!          val single precision integer
-    !! @ingroup group_parameters
-    !! @param[in] sym parameter symbol
-    !! @param[in] val parameter value as single precision integer
-    !! @param[out] ierr error code
-    !!
-    !! @b Remarks
     subroutine defparam_i4(sym, ival)
         character(*), intent(in) :: sym
         integer(i4), intent(in) :: ival
@@ -204,7 +158,7 @@ module evaluate_parameters
     !! @ingroup group_parameters
     !! @param[inout] sym parameter symbol
     !! @param[out] val parameter value as single precision integer
-    !! @param[out] ierr error code
+    !! @param[out] (optional) ierr error code
     !!
     !! @b Remarks
     subroutine getparam(sym, var, ierr) 
@@ -213,8 +167,8 @@ module evaluate_parameters
         integer, intent(out), optional  :: ierr
         !private
         character(len_trim(sym)) :: usym
-        
         integer :: ifind, j
+
         if (present(ierr)) ierr = 0
         sym = adjustl(sym)
         if (.not. is_letter(sym(1:1)) .or. len_trim(sym) > 24) then
@@ -227,7 +181,7 @@ module evaluate_parameters
         usym = uppercase(sym)
         do j = 1, nparams
             if (trim(usym) == trim(params(j)%symbol)) then
-                var = params(j)%value
+                var = params(j)%val
                 ifind = j
                 exit
             end if
@@ -247,7 +201,7 @@ module evaluate_parameters
     !! @ingroup group_parameters
     !! @param[inout] xinchar input string
     !! @param[out] cval parameter value as double precision complex
-    !! @param[out] ierr error code
+    !! @param[out] (optional) ierr error code
     !!
     !! @b Remarks
     subroutine getvalue(xinchar, cval, ierr) 
@@ -273,6 +227,20 @@ module evaluate_parameters
             return
         end if
     end subroutine
+
+    !> @brief   List all variables, their names and their values
+    !! @ingroup group_parameters
+    !!
+    !! @b Remarks
+    subroutine listvar()
+        integer :: i
+
+        write (*, '(/a)') ' VARIABLE LIST:'
+        call setdefault()
+        do i = 1, nparams
+            write (*, *) trim(params(i)%symbol), ' = ', params(i)%val
+        end do
+    end subroutine
     
     !> @private
     subroutine setdefault()
@@ -281,23 +249,11 @@ module evaluate_parameters
             allocate(params(lbuffer))
             
             params(1)%symbol = 'PI'
-            params(1)%value = (3.14159265358979_r8, 0.0_r8)
+            params(1)%val = (3.14159265358979_r8, 0.0_r8)
             params(2)%symbol = 'I'
-            params(2)%value = (0.0_r8, 1.0_r8)
+            params(2)%val = (0.0_r8, 1.0_r8)
             nparams = 2
         end if
-    end subroutine
-    
-    !> @brief List all variables and their values
-    !!
-    !! @b Remarks
-    subroutine listvar()
-        integer :: i
-        write (*, '(/a)') ' VARIABLE LIST:'
-        call setdefault()
-        do i = 1, nparams
-            write (*, *) trim(params(i)%symbol), ' = ', params(i)%value
-        end do
     end subroutine
     
 end module

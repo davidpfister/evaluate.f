@@ -7,7 +7,7 @@
 !! @link evaluate_kinds evaluate_kinds @endlink module.
 !! @n
 !! @code{.f90}
-!! real(r8) a      :: 0_r8
+!! real(r8) a       :: 0.0_r8
 !! integer(i4) i   :: 1_i4 
 !! @endcode
 !! @par
@@ -18,12 +18,12 @@
 !! @{
 module evaluate_kinds
     use, intrinsic :: iso_fortran_env, only: int8, &
-                                           int16, &
-                                           int32, &
-                                           int64, &
-                                           real32, &
-                                           real64, &
-                                           real128
+                                             int16, &
+                                             int32, &
+                                             int64, &
+                                             real32, &
+                                             real64, &
+                                             real128
 
     implicit none; private
 

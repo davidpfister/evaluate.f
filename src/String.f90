@@ -8,12 +8,15 @@ module evaluate_string
     
     contains
     
-    !> @ingroup group_string
-    !> @brief Check if the character i s a letter
+    !> @brief   Check if the character is a letter
+    !! @ingroup group_string
     !! @param[in] str character input character
     !!
+    !! @returns 
+    !! logical. .true. if the character is a letter, .false. otherwise.
+    !!
     !! @b Examples
-    !! ```fortran
+    !! @code
     !! character(*), parameter :: input = 'abcd'
     !! integer :: i 
     !! do i = 1, 4
@@ -21,8 +24,8 @@ module evaluate_string
     !!         print*, input(i:i)
     !!     end if
     !! end do
-    !! ```
-    !! @returns logical @n@n .true. if the character is a letter, .false. otherwise.
+    !! @endcode
+    !!
     !! @b Remarks
     pure function is_letter(ch) result(res)
         character(1), intent(in)   :: ch
@@ -36,18 +39,20 @@ module evaluate_string
         end select
     end function
     
-    !> @ingroup group_string
-    !> @brief Convert string to upper case
+    !> @brief   Convert string to upper case
+    !! @ingroup group_string
     !! param[in] str character(*) input string
     !!
+    !! @returns character(:), allocatable. A string with uppercase characters.
+    !!
     !! @b Examples
-    !! ```fortran
+    !! @code
     !! character(*), parameter :: input = 'test'
     !! character(:), allocatable :: output
     !! output = uppercase(input)
     !! if (output == 'TEST') print*, 'OK'
-    !! ```
-    !! @returns character(:), allocatable @n@n A string with uppercase characters.
+    !! @endcode
+    !!
     !! @b Remarks
     pure function uppercase(str) result(ucstr)
         character(*), intent(in) :: str
