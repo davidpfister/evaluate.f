@@ -153,12 +153,12 @@ module evaluate_parameters
         call defparam_c8(sym, vald)
     end subroutine
     
-    !> @brief   Find double precision complex value var
-    !!          corresponding to symbol sym
+    !> @brief   Find double precision complex value `var`
+    !!          corresponding to symbol `sym`
     !! @ingroup group_parameters
     !! @param[inout] sym parameter symbol
-    !! @param[out] val parameter value as single precision integer
-    !! @param[out] (optional) ierr error code
+    !! @param[out] var parameter value as single precision integer
+    !! @param[out]  ierr (optional) error code
     !!
     !! @b Remarks
     subroutine getparam(sym, var, ierr) 
@@ -195,13 +195,13 @@ module evaluate_parameters
     end subroutine
     
     !> @brief   Finds double precision complex value
-    !!          corresponding to number string xinchar
+    !!          corresponding to number string `xinchar`
     !!          or value in symbol table corresponding
-    !!          to symbol name xinchar.
+    !!          to symbol name `xinchar`.
     !! @ingroup group_parameters
     !! @param[inout] xinchar input string
     !! @param[out] cval parameter value as double precision complex
-    !! @param[out] (optional) ierr error code
+    !! @param[out] ierr (optional) error code
     !!
     !! @b Remarks
     subroutine getvalue(xinchar, cval, ierr) 

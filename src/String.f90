@@ -10,10 +10,10 @@ module evaluate_string
     
     !> @brief   Check if the character is a letter
     !! @ingroup group_string
-    !! @param[in] str character input character
+    !! @param[in] str input character
     !!
     !! @returns 
-    !! logical. .true. if the character is a letter, .false. otherwise.
+    !! _logical_. `.true.` if the character is a letter, `.false.` otherwise.
     !!
     !! @b Examples
     !! @code
@@ -41,9 +41,9 @@ module evaluate_string
     
     !> @brief   Convert string to upper case
     !! @ingroup group_string
-    !! param[in] str character(*) input string
+    !! param[in] str input string
     !!
-    !! @returns character(:), allocatable. A string with uppercase characters.
+    !! @returns _character(*)_. A string with uppercase characters.
     !!
     !! @b Examples
     !! @code
@@ -54,16 +54,16 @@ module evaluate_string
     !! @endcode
     !!
     !! @b Remarks
-    pure function uppercase(str) result(ucstr)
+    pure function uppercase(str) result(res)
         character(*), intent(in) :: str
-        character(len_trim(str)) :: ucstr
+        character(len_trim(str)) :: res
         !private
         integer :: ilen, ioffset, iquote, iqc, iav, i
 
         ilen = len_trim(str)
         ioffset = iachar('A') - iachar('a')
         iquote = 0
-        ucstr = str
+        res = str
         do i = 1, ilen
             iav = iachar(str(i:i))
             if (iquote == 0 .and. (iav == 34 .or. iav == 39)) then
@@ -77,9 +77,9 @@ module evaluate_string
             end if
             if (iquote == 1) cycle
             if (iav >= iachar('a') .and. iav <= iachar('z')) then
-                ucstr(i:i) = achar(iav + ioffset)
+                res(i:i) = achar(iav + ioffset)
             else
-                ucstr(i:i) = str(i:i)
+                res(i:i) = str(i:i)
             end if
         end do
     end function

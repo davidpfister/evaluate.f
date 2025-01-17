@@ -1,6 +1,6 @@
 !> @defgroup group_evaluate evaluate
-!> @brief Evaluate module
-!! @{
+!> @brief Evaluate module 
+!! Provides the interfaces for evaluating a string expression.
 module evaluate
     use evaluate_value
     use evaluate_kinds
@@ -11,11 +11,68 @@ module evaluate
     private
 
     public :: eval, defparam, listvar, uppercase
-    public :: i1, i2, i4, i8, r4, r8, r16, c4, c8, c16
+    public :: i1, i2, i4, i8, r4, r8, c4, c8
 
     !> @interface eval
-    !> @brief Evaluate expression expr for
-    !! val numerics
+    !! @ingroup group_evaluate
+    !> @brief Evaluate expression `expr` for `val` numerics
+    !! @par
+    !! <h2>Methods</h2>
+    !!
+    !! <h3>eval(character(*) expr, complex(c8) val, integer ierr)</h3>
+    !! 
+    !! @param[in] expr input string expression
+    !! @param[out] val return value as complex(c8)
+    !! @param[out] ierr (optional) integer error code
+    !! 
+    !! <h2> </h2>
+    !! <h3>eval(character(*) expr, complex(c4) val, integer ierr)</h3>
+    !! 
+    !! @param[in] expr input string expression
+    !! @param[out] val return value as complex(c4)
+    !! @param[out] ierr (optional) integer error code
+    !!
+    !! <h2> </h2>
+    !! <h3>eval(character(*) expr, real(r8) val, integer ierr)</h3>
+    !! 
+    !! @param[in] expr input string expression
+    !! @param[out] val return value as real(r8)
+    !! @param[out] ierr (optional) integer error code
+    !!
+    !! <h2> </h2>
+    !! <h3>eval(character(*) expr, real(r4) val, integer ierr)</h3>
+    !! 
+    !! @param[in] expr input string expression
+    !! @param[out] val return value as real(r4)
+    !! @param[out] ierr (optional) integer error code
+    !!
+    !! <h2> </h2>
+    !! <h3>eval(character(*) expr, integer(i8) val, integer ierr)</h3>
+    !! 
+    !! @param[in] expr input string expression
+    !! @param[out] val return value as integer(i8)
+    !! @param[out] ierr (optional) integer error code
+    !!
+    !! <h2> </h2>
+    !! <h3>eval(character(*) expr, integer(i4) val, integer ierr)</h3>
+    !! 
+    !! @param[in] expr input string expression
+    !! @param[out] val return value as integer(i4)
+    !! @param[out] ierr (optional) integer error code
+    !!
+    !! <h2> Examples </h2>
+    !! The following demonstrate a call to the `eval` interface.
+    !! @code{.f90}
+    !!  real(r8) :: y
+    !!  integer :: ierr
+    !!  call defparam('a', 0.900_r8)
+    !!  call defparam('b', 0.100_r8)
+    !!  call defparam('c', 0.110_r8)
+    !!  call eval('cos((a+b)^2+1.6*log(c))', x, ierr)
+    !!
+    !! print*, y
+    !! @endcode
+    !! <h2> Remarks </h2>
     interface eval
     !! @cond
         module procedure eval_c8 ! Double precision complex result
@@ -28,12 +85,61 @@ module evaluate
     end interface
     
     !> @interface defparam
+    !! @ingroup group_evaluate
     !> @brief Associates sym with val in symbol table,
     !!        val double precision complex
-    !! @verbatim defparam(sym, val, ierr) @endverbatim
-    !! @param[in] sym parameter symbol
-    !! @param[in] val parameter value
-    !! @param[out] ierr error code
+    !! <h2>Methods</h2>
+    !!
+    !! <h3>value(character(*) sym, character(*) expr)</h3>
+    !! 
+    !! @param[in] str symbol expression
+    !! @param[in] expr param expression
+    !! 
+    !! <h2> </h2>
+    !! <h3>value(character(*) sym, complex(c8) val)</h3>
+    !! 
+    !! @param[in] str symbol expression
+    !! @param[in] val numerical value as complex(c8)
+    !! 
+    !! <h2> </h2>
+    !! <h3>value(character(*) sym, complex(c4) val)</h3>
+    !! 
+    !! @param[in] str symbol expression
+    !! @param[in] val numerical value as complex(c4)
+    !! 
+    !! <h2> </h2>
+    !! <h3>value(character(*) sym, real(r8) val)</h3>
+    !! 
+    !! @param[in] str symbol expression
+    !! @param[in] val numerical value as real(r8)
+    !! 
+    !! <h2> </h2>
+    !! <h3>value(character(*) sym, real(r4) val)</h3>
+    !! 
+    !! @param[in] str symbol expression
+    !! @param[in] val numerical value as real(r4)
+    !! 
+    !! <h2> </h2>
+    !! <h3>value(character(*) sym, integer(i8) ival)</h3>
+    !! 
+    !! @param[in] str symbol expression
+    !! @param[in] ival numerical value as integer(i8)
+    !!
+    !! <h2> </h2>
+    !! <h3>value(character(*) sym, integer(i4) ival)</h3>
+    !! 
+    !! @param[in] str symbol expression
+    !! @param[in] ival numerical value as integer(i4)
+    !!
+    !! <h2> Examples </h2>
+    !! The following demonstrate a call to the `defparam` interface.
+    !! Three parameters, `a`, `b` and `c` and associated numerical values are defined.
+    !! @code{.f90}
+    !!  call defparam('a', 0.900_r8)
+    !!  call defparam('b', 0.100_r8)
+    !!  call defparam('c', 0.110_r8)
+    !! @endcode
+    !! <h2> Remarks </h2>
     interface defparam
     !! @cond
         module procedure defparam_char ! value given by expression
@@ -577,4 +683,3 @@ module evaluate
     end subroutine
 
 end module
-!! @}

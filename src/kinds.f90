@@ -22,8 +22,7 @@ module evaluate_kinds
                                              int32, &
                                              int64, &
                                              real32, &
-                                             real64, &
-                                             real128
+                                             real64
 
     implicit none; private
 
@@ -35,10 +34,8 @@ module evaluate_kinds
     integer, parameter, public :: i8  = int64 !< @brief 64-bit integer constant deriving from the int64 intrinsic constant of the `iso_fortran_env` module
     integer, parameter, public :: r4  = real32 !< @brief single precision, 32-bit real constant deriving from the real32 intrinsic constant of the `iso_fortran_env` module
     integer, parameter, public :: r8  = real64 !< @brief double precision, 64-bit real constant deriving from the real64 intrinsic constant of the `iso_fortran_env` module
-    integer, parameter, public :: r16 = real128 !< @brief quadruple precision, 128-bit real constant deriving from the real128 intrinsic constant of the `iso_fortran_env` module
     integer, parameter, public :: c4  = real32 !< @brief single precision, 32-bit real constant deriving from the real32 intrinsic constant of the `iso_fortran_env` module
     integer, parameter, public :: c8  = real64 !< @brief double precision, 64-bit real constant deriving from the real64 intrinsic constant of the `iso_fortran_env` module
-    integer, parameter, public :: c16 = real128 !< @brief quadruple precision, 128-bit real constant deriving from the real128 intrinsic constant of the `iso_fortran_env` module
     !> @}
 
 end module

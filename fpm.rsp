@@ -9,13 +9,13 @@ option clean --all
 
 @rebuild
 system rmdir /s /q build
-option build --flag '-ffree-line-length-none'
+option build
 
 @build
-option build --flag '-ffree-line-length-none'
+option build
 
 @test
-options test --flag '-ffree-line-length-none' '-D_QUIET' 
+options test '-D_QUIET' 
 
 @doc
 option clean --all

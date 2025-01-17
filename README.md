@@ -28,11 +28,11 @@
 <!-- ABOUT THE PROJECT -->
 ## About the Project
 <p align="center">
-  <img src="https://github.com/davidpfister/benchmark.f/blob/master/.dox/images/screenshot.png?raw=true">
+  <img src="https://github.com/davidpfister/evaluate.f/blob/master/.dox/images/calc1.jpg?raw=true">
 </p>
 
-This repo contains routines for evaluating mathematical expressions contained in strings, 
-e.g., `cos((a+b)^2+1.6*log(c))`. It is a modernized version of the code developed by [George Benthien](https://gbenthien.net/strings/index.html). 
+This repo contains routines for evaluating mathematical expressions contained in strings, e.g., `cos((a+b)^2+1.6*log(c))`. 
+It is a modernized version of the code developed by [George Benthien](https://gbenthien.net/strings/index.html). 
 
 I came across George's code while working on [benchmark.f](https://github.com/davidpfister/benchmark.f). I created an example which contains all the equation parsers I could find and I was impressed by the 
 performances of the present code. I decided to give it a bit more visibility by creating this repo and
@@ -42,7 +42,7 @@ The strings expressions can contain numbers (e.g., `1.5` or `1.5e6`),
 previously defined parameters (like `a`,`b`, `c` above), arithmetic operators (`+`,`-`,`*`,`/`,`^`, `**`), and any of 
 the functions (`sin`, `cos`, `tan`, `log10`, `log`, `abs`, `exp`, `sqrt`, 
 `real`, `imag`, `conjg`, and `ang`). They can also contain nested levels of parentheses. The module also contains routines for defining and retrieving user-specified parameters. 
-The quantity pi and the imaginary unit i are pre-defined parameters.
+The quantity `pi` and the imaginary unit `i` are pre-defined parameters.
 
 * [![fpm][fpm]][fpm-url]
 * [![ifort][ifort]][ifort-url]
@@ -87,7 +87,7 @@ cd evaluate.f
 
 The repo is compatible with fpm projects. It can be build using _fpm_
 ```bash
-fpm build --flag '-ffree-line-length-none'
+fpm build
 ```
 For convenience, the  repo also contains a response file that can be invoked as follows: 
 ```
@@ -119,13 +119,13 @@ option clean --all
 
 @rebuild
 system rmdir /s /q build
-option build --flag '-ffree-line-length-none'
+option build
 
 @build
-option build --flag '-ffree-line-length-none'
+option build
 
 @test
-options test --flag '-ffree-line-length-none' '-D_QUIET' 
+options test '-D_QUIET' 
 
 @doc
 option clean --all
@@ -152,16 +152,16 @@ The repo contains the solution file (_Evaluate.sln_) to get you started with Vis
 ## Usage
 
 The user can assign values to parameters that can be used in expressions with
-the subroutine defparam. The calling syntax is
+the subroutine `defparam`. The calling syntax is
 ```fortran
-    call defparam(symbol,value) 
+    call defparam(symbol, value) 
     !or
-    call defparam(symbol,expr)
+    call defparam(symbol, expr)
 ```
-where _symbol_ is the desired parameter name; _value_ is a real, integer, or
-complex variable (single or double precision); and _expr_ is a string
+where _symbol_ is the desired parameter name; _value_ is a _real_, _integer_, or
+_complex_ variable (single or double precision); and _expr_ is a string
 containing an expression to be evaluated. The value obtained by evaluating the
-expression expr is associated with the parameter symbol. Parameter names must
+expression _expr_ is associated with the parameter _symbol_. Parameter names must
 begin with a letter (a-z, A-Z) and must not be longer than 24 characters.
 Parameter names are not case dependent.
 
@@ -187,17 +187,6 @@ Example expression:
 ```txt
          conjg(((cos(x) + sqrt(a+i*b))^2+complex(ln(1.6e-4),20))/2)
 ```
-
-An equation of the form 'symbol = expression' can be evaluated using the
-subroutine `evaleqn`. The calling syntax is:
-
-```fortran
-         call evaleqn(eqn)
-```
-
-where _eqn_ is a string containing the equation. The right-hand-side of the
-equation is evaluated and assigned to the symbol given by the left-hand-side.
-
 The value assigned to a symbol can be retrieved using the subroutine `getparam`.
 The calling syntax is:
 ```fortran
