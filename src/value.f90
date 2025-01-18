@@ -92,7 +92,7 @@ module evaluate_value
             ierr = 3
             return
         end if
-        read (str, *, ierrtat=ierr) rnum
+        read (str, *, iostat=ierr) rnum
     end subroutine
 
     subroutine value_r4(str, rnum, ierr)

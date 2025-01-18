@@ -32,8 +32,10 @@ module evaluate_string
         logical :: res
 
         select case (ch)
-        case ('A':'Z', 'a':'z')
+        case ('A':'Z')
             res = .true.
+		case ('a':'z')
+			res = .true.
         case default
             res = .false.
         end select
