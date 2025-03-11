@@ -36,7 +36,7 @@ It is a modernized version of the code developed by [George Benthien](https://gb
 
 I came across George's code while working on [benchmark.f](https://github.com/davidpfister/benchmark.f). I created an example which contains all the equation parsers I could find and I was impressed by the 
 performances of the present code. I decided to give it a bit more visibility by creating this repo and
-started to work on some modernization. It is now up-to-date, fully explicit, and fpm-compatible. 
+started to work on some modernization. It is now up-to-date, fully type-explicit, and fpm-compatible. 
 
 The strings expressions can contain numbers (e.g., `1.5` or `1.5e6`), 
 previously defined parameters (like `a`,`b`, `c` above), arithmetic operators (`+`,`-`,`*`,`/`,`^`, `**`), and any of 
@@ -58,6 +58,7 @@ To build that library you need
 - a Fortran 2008 compliant compiler, or better, a Fortran 2018 compliant compiler.
 
 The following compilers are tested on the default branch of _evaluate.f_:
+
 <center>
 
 | Name |	Version	| Platform	| Architecture |
@@ -90,7 +91,7 @@ The repo is compatible with fpm projects. It can be build using _fpm_
 fpm build
 ```
 For convenience, the  repo also contains a response file that can be invoked as follows: 
-```
+```bash
 fpm @build
 ```
 (For the Windows users, that command does not work in Powershell since '@' is a reserved symbol. One should
@@ -98,16 +99,16 @@ use the '--%' as follows: `fpm --% @build`.
 This is linked to the following [issue](https://github.com/urbanjost/M_CLI2/issues/19))
 
 Building with ifort requires to specify the compiler name (gfortran by default)
-```cmd
+```bash
 fpm @build --compiler ifort
 ```
 Alternatively, the compiler can be set using fpm environment variables.
-```cmd
+```bash
 set FPM_FC=ifort
 ```
 
 Besides the build command, several commands are also available:
-```cmd
+```bash
 @pretiffy
 option clean --all
 system fprettify .\src\ -r --case 1 1 1 1 -i 4 --strict-indent --enable-replacements --strip-comments --c-relations

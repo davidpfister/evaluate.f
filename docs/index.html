@@ -198,7 +198,7 @@ Introduction</h1>
 About the Project</h2>
 <p><img src="https://github.com/davidpfister/evaluate.f/blob/master/.dox/images/calc1.jpg?raw=true" alt="" class="inline"/> </p>
 <p>This repo contains routines for evaluating mathematical expressions contained in strings, e.g., <code>cos((a+b)^2+1.6*log(c))</code>. It is a modernized version of the code developed by <a href="https://gbenthien.net/strings/index.html">George Benthien</a>.</p>
-<p>I came across George's code while working on <a href="https://github.com/davidpfister/benchmark.f">benchmark.f</a>. I created an example which contains all the equation parsers I could find and I was impressed by the performances of the present code. I decided to give it a bit more visibility by creating this repo and started to work on some modernization. It is now up-to-date, fully explicit, and fpm-compatible.</p>
+<p>I came across George's code while working on <a href="https://github.com/davidpfister/benchmark.f">benchmark.f</a>. I created an example which contains all the equation parsers I could find and I was impressed by the performances of the present code. I decided to give it a bit more visibility by creating this repo and started to work on some modernization. It is now up-to-date, fully type-explicit, and fpm-compatible.</p>
 <p>The strings expressions can contain numbers (e.g., <code>1.5</code> or <code>1.5e6</code>), previously defined parameters (like <code>a</code>,<code>b</code>, <code>c</code> above), arithmetic operators (<code>+</code>,<code>-</code>,<code>*</code>,<code>/</code>,<code>^</code>, <code>**</code>), and any of the functions (<code>sin</code>, <code>cos</code>, <code>tan</code>, <code>log10</code>, <code>log</code>, <code>abs</code>, <code>exp</code>, <code>sqrt</code>, <code>real</code>, <code>imag</code>, <code>conjg</code>, and <code>ang</code>). They can also contain nested levels of parentheses. The module also contains routines for defining and retrieving user-specified parameters. The quantity <code>pi</code> and the imaginary unit <code>i</code> are pre-defined parameters.</p>
 <ul>
 <li><a href="https://fpm.fortran-lang.org/"><img src="https://img.shields.io/badge/fpm-000000?style=for-the-badge&amp;logo=Fortran&amp;logoColor=734F96" alt="fpm" class="inline"/></a></li>
@@ -213,7 +213,8 @@ Requirements</h3>
 <ul>
 <li>a Fortran 2008 compliant compiler, or better, a Fortran 2018 compliant compiler.</li>
 </ul>
-<p>The following compilers are tested on the default branch of <em>evaluate.f</em>: </p><center></center><center><table class="markdownTable">
+<p>The following compilers are tested on the default branch of <em>evaluate.f</em>:</p>
+<center></center><center><table class="markdownTable">
 <tr class="markdownTableHead">
 <th class="markdownTableHeadCenter">Name   </th><th class="markdownTableHeadCenter">Version   </th><th class="markdownTableHeadCenter">Platform   </th><th class="markdownTableHeadCenter">Architecture    </th></tr>
 <tr class="markdownTableRowOdd">
