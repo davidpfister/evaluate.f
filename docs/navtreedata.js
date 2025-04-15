@@ -28,14 +28,14 @@ var NAVTREE =
     [ "Introduction", "index.html#autotoc_md0", [
       [ "About the Project", "index.html#autotoc_md1", null ],
       [ "Getting Started", "index.html#autotoc_md2", [
-        [ "Requirements", "index.html#autotoc_md3", null ],
-        [ "Installation", "index.html#autotoc_md4", [
-          [ "Get the code", "index.html#autotoc_md5", null ],
-          [ "Build with fpm", "index.html#autotoc_md6", null ],
-          [ "Build with Visual Studio 2019", "index.html#autotoc_md7", null ]
-        ] ]
+        [ "Requirements", "index.html#autotoc_md3", null ]
       ] ],
-      [ "Usage", "index.html#autotoc_md8", [
+      [ "Usage", "index.html#autotoc_md4", [
+        [ "Installation", "index.html#autotoc_md5", [
+          [ "Get the code", "index.html#autotoc_md6", null ],
+          [ "Build with fpm", "index.html#autotoc_md7", null ],
+          [ "Build with Visual Studio 2019", "index.html#autotoc_md8", null ]
+        ] ],
         [ "Contributing", "index.html#autotoc_md9", null ],
         [ "Style", "index.html#autotoc_md10", null ],
         [ "Reporting a bug", "index.html#autotoc_md11", null ],

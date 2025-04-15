@@ -146,25 +146,25 @@ $(function(){initNavTree('index.html',''); initResizable(true); });
           <li class="level3">
             <a href="#autotoc_md3">Requirements</a>
           </li>
-          <li class="level3">
-            <a href="#autotoc_md4">Installation</a>
-            <ul>
-              <li class="level4">
-                <a href="#autotoc_md5">Get the code</a>
-              </li>
-              <li class="level4">
-                <a href="#autotoc_md6">Build with fpm</a>
-              </li>
-              <li class="level4">
-                <a href="#autotoc_md7">Build with Visual Studio 2019</a>
-              </li>
-            </ul>
-          </li>
         </ul>
       </li>
       <li class="level2">
-        <a href="#autotoc_md8">Usage</a>
+        <a href="#autotoc_md4">Usage</a>
         <ul>
+          <li class="level3">
+            <a href="#autotoc_md5">Installation</a>
+            <ul>
+              <li class="level4">
+                <a href="#autotoc_md6">Get the code</a>
+              </li>
+              <li class="level4">
+                <a href="#autotoc_md7">Build with fpm</a>
+              </li>
+              <li class="level4">
+                <a href="#autotoc_md8">Build with Visual Studio 2019</a>
+              </li>
+            </ul>
+          </li>
           <li class="level3">
             <a href="#autotoc_md9">Contributing</a>
           </li>
@@ -224,50 +224,7 @@ Requirements</h3>
 </table>
 </center><center></center><p>Unit test rely on the the header file <a href="https://github.com/davidpfister/fortiche/tree/master/src/assertion"><code>assertion.inc</code></a>. Since the whole framework fits in a single file, it has been added directly to the repo.</p>
 <p>Linting, indentation, and styling is done with <a href="https://github.com/fortran-lang/fprettify">fprettify</a> with the following settings </p><div class="fragment"><div class="line">fprettify .\src\ -r --case 1 1 1 1 -i 4 --strict-indent --enable-replacements --strip-comments --c-relations</div>
-</div><!-- fragment --><h3><a class="anchor" id="autotoc_md4"></a>
-Installation</h3>
-<h4><a class="anchor" id="autotoc_md5"></a>
-Get the code</h4>
-<div class="fragment"><div class="line">git clone https://github.com/davidpfister/evaluate.f</div>
-<div class="line">cd evaluate.f</div>
-</div><!-- fragment --><h4><a class="anchor" id="autotoc_md6"></a>
-Build with fpm</h4>
-<p>The repo is compatible with fpm projects. It can be build using <em>fpm</em> </p><div class="fragment"><div class="line">fpm build</div>
-</div><!-- fragment --><p> For convenience, the repo also contains a response file that can be invoked as follows: </p><div class="fragment"><div class="line">fpm @build</div>
-</div><!-- fragment --><p> (For the Windows users, that command does not work in Powershell since '@' is a reserved symbol. One should use the '&ndash;' as follows: <code>fpm --% @build</code>. This is linked to the following <a href="https://github.com/urbanjost/M_CLI2/issues/19">issue</a>)</p>
-<p>Building with ifort requires to specify the compiler name (gfortran by default) </p><div class="fragment"><div class="line">fpm @build --compiler ifort</div>
-</div><!-- fragment --><p> Alternatively, the compiler can be set using fpm environment variables. </p><div class="fragment"><div class="line">set FPM_FC=ifort</div>
-</div><!-- fragment --><p>Besides the build command, several commands are also available: </p><div class="fragment"><div class="line">@pretiffy</div>
-<div class="line">option clean --all</div>
-<div class="line">system fprettify .\src\ -r --case 1 1 1 1 -i 4 --strict-indent --enable-replacements --strip-comments --c-relations</div>
-<div class="line">system fprettify .\tests\ -r --case 1 1 1 1 -i 4 --strict-indent --enable-replacements --strip-comments --c-relations</div>
-<div class="line">system fprettify .\examples\calc\ -r --case 1 1 1 1 -i 4 --strict-indent --enable-replacements --strip-comments --c-relations</div>
-<div class="line"> </div>
-<div class="line">@clean</div>
-<div class="line">option clean --all</div>
-<div class="line"> </div>
-<div class="line">@rebuild</div>
-<div class="line">system rmdir /s /q build</div>
-<div class="line">option build</div>
-<div class="line"> </div>
-<div class="line">@build</div>
-<div class="line">option build</div>
-<div class="line"> </div>
-<div class="line">@test</div>
-<div class="line">options test &#39;-D_QUIET&#39; </div>
-<div class="line"> </div>
-<div class="line">@doc</div>
-<div class="line">option clean --all</div>
-<div class="line">system cd ./.dox &amp; doxygen ./Doxyfile.in &amp; cd ..</div>
-</div><!-- fragment --><p>The settings to the cpp preprocessor are specified in the file.</p>
-<div class="fragment"><div class="line">[preprocess]</div>
-<div class="line">cpp.suffixes = [&quot;F90&quot;, &quot;f90&quot;]</div>
-<div class="line">cpp.macros = [&quot;_FPM&quot;]</div>
-</div><!-- fragment --><p> The <code>_FPM</code> macro is used to differentiate the build when compiling with <em>fpm</em> or <em>Visual Studio</em>. This is mostly present to adapt the hard coded paths that differs in both cases.</p>
-<h4><a class="anchor" id="autotoc_md7"></a>
-Build with Visual Studio 2019</h4>
-<p>The project was originally developed on Windows with Visual Studio 2019. The repo contains the solution file (<em>Evaluate.sln</em>) to get you started with Visual Studio 2019.</p>
-<h2><a class="anchor" id="autotoc_md8"></a>
+</div><!-- fragment --><h2><a class="anchor" id="autotoc_md4"></a>
 Usage</h2>
 <p>The user can assign values to parameters that can be used in expressions with the subroutine <code>defparam</code>. The calling syntax is </p><div class="fragment"><div class="line"><span class="comment">call defparam(symbol, value) </span></div>
 <div class="line"><span class="comment">!or</span></div>
@@ -311,6 +268,49 @@ Usage</h2>
 <tr class="markdownTableRowEven">
 <td class="markdownTableBodyCenter">14   </td><td class="markdownTableBodyLeft">Argument of tangent function a multiple of pi/2   </td></tr>
 </table>
+<h3><a class="anchor" id="autotoc_md5"></a>
+Installation</h3>
+<h4><a class="anchor" id="autotoc_md6"></a>
+Get the code</h4>
+<div class="fragment"><div class="line">git clone https://github.com/davidpfister/evaluate.f</div>
+<div class="line">cd evaluate.f</div>
+</div><!-- fragment --><h4><a class="anchor" id="autotoc_md7"></a>
+Build with fpm</h4>
+<p>The repo is compatible with fpm projects. It can be build using <em>fpm</em> </p><div class="fragment"><div class="line">fpm build</div>
+</div><!-- fragment --><p> For convenience, the repo also contains a response file that can be invoked as follows: </p><div class="fragment"><div class="line">fpm @build</div>
+</div><!-- fragment --><p> (For the Windows users, that command does not work in Powershell since '@' is a reserved symbol. One should use the '&ndash;' as follows: <code>fpm --% @build</code>. This is linked to the following <a href="https://github.com/urbanjost/M_CLI2/issues/19">issue</a>)</p>
+<p>Building with ifort requires to specify the compiler name (gfortran by default) </p><div class="fragment"><div class="line">fpm @build --compiler ifort</div>
+</div><!-- fragment --><p> Alternatively, the compiler can be set using fpm environment variables. </p><div class="fragment"><div class="line">set FPM_FC=ifort</div>
+</div><!-- fragment --><p>Besides the build command, several commands are also available: </p><div class="fragment"><div class="line">@pretiffy</div>
+<div class="line">option clean --all</div>
+<div class="line">system fprettify .\src\ -r --case 1 1 1 1 -i 4 --strict-indent --enable-replacements --strip-comments --c-relations</div>
+<div class="line">system fprettify .\tests\ -r --case 1 1 1 1 -i 4 --strict-indent --enable-replacements --strip-comments --c-relations</div>
+<div class="line">system fprettify .\examples\calc\ -r --case 1 1 1 1 -i 4 --strict-indent --enable-replacements --strip-comments --c-relations</div>
+<div class="line"> </div>
+<div class="line">@clean</div>
+<div class="line">option clean --all</div>
+<div class="line"> </div>
+<div class="line">@rebuild</div>
+<div class="line">system rmdir /s /q build</div>
+<div class="line">option build</div>
+<div class="line"> </div>
+<div class="line">@build</div>
+<div class="line">option build</div>
+<div class="line"> </div>
+<div class="line">@test</div>
+<div class="line">options test &#39;-D_QUIET&#39; </div>
+<div class="line"> </div>
+<div class="line">@doc</div>
+<div class="line">option clean --all</div>
+<div class="line">system cd ./.dox &amp; doxygen ./Doxyfile.in &amp; cd ..</div>
+</div><!-- fragment --><p>The settings to the cpp preprocessor are specified in the file.</p>
+<div class="fragment"><div class="line">[preprocess]</div>
+<div class="line">cpp.suffixes = [&quot;F90&quot;, &quot;f90&quot;]</div>
+<div class="line">cpp.macros = [&quot;_FPM&quot;]</div>
+</div><!-- fragment --><p> The <code>_FPM</code> macro is used to differentiate the build when compiling with <em>fpm</em> or <em>Visual Studio</em>. This is mostly present to adapt the hard coded paths that differs in both cases.</p>
+<h4><a class="anchor" id="autotoc_md8"></a>
+Build with Visual Studio 2019</h4>
+<p>The project was originally developed on Windows with Visual Studio 2019. The repo contains the solution file (<em>Evaluate.sln</em>) to get you started with Visual Studio 2019.</p>
 <h3><a class="anchor" id="autotoc_md9"></a>
 Contributing</h3>
 <p>Contributions are what make the open source community such an amazing place to learn, inspire, and create. Any contributions you make are <b>greatly appreciated</b>. So, thank you for considering contributing to <em>evaluate.f</em>. Please review and follow these guidelines to make the contribution process simple and effective for all involved. In return, the developers will help address your problem, evaluate changes, and guide you through your pull requests.</p>
