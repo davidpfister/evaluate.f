@@ -27,9 +27,11 @@
 # Introduction
 <!-- ABOUT THE PROJECT -->
 ## About the Project
+<center>
 <p align="center">
-  <img src="https://github.com/davidpfister/evaluate.f/blob/master/.dox/images/calc1.jpg?raw=true">
+  <img src="https://github.com/davidpfister/evaluate.f/blob/master/.dox/images/calc1.jpg?raw=true" width="512" height="512">
 </p>
+</center>
 
 This repo contains routines for evaluating mathematical expressions contained in strings, e.g., `cos((a+b)^2+1.6*log(c))`. 
 It is a modernized version of the code developed by [George Benthien](https://gbenthien.net/strings/index.html). 

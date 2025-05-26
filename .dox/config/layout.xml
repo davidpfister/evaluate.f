@@ -4,7 +4,7 @@
   <navindex>
     <tab type="mainpage" visible="yes" title="Evaluate"/>
     <tab type="classindex" visible="no" title="Types"/>
-    <tab type="pages" visible="yes" title="" intro=""/>
+    <tab type="pages" visible="yes" title="Examples" intro=""/>
     <tab type="topics" visible="yes" title="API" intro=""/>
       <!-- <tab type="classindex" visible="$ALPHABETICAL_INDEX" title=""/>
       <tab type="hierarchy" visible="yes" title="" intro=""/> -->

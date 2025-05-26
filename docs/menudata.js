@@ -24,7 +24,7 @@
 */
 var menudata={children:[
 {text:"Evaluate",url:"index.html"},
-{text:"Related Pages",url:"pages.html"},
+{text:"Examples",url:"pages.html"},
 {text:"API",url:"topics.html"},
 {text:"Files",url:"files.html"},
 {text:"GitHub Repository",url:"^https://github.com/davidpfister/evaluate.f"}]}

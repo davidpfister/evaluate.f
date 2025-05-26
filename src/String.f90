@@ -10,7 +10,7 @@ module evaluate_string
     
     !> @brief   Check if the character is a letter
     !! @ingroup group_string
-    !! @param[in] str input character
+    !! @param[in] ch input character
     !!
     !! @returns 
     !! _logical_. `.true.` if the character is a letter, `.false.` otherwise.

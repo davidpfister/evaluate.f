@@ -37,7 +37,7 @@ MathJax.Hub.Config({
   jax: ["input/TeX","output/HTML-CSS"],
 });
 </script>
-<script type="text/javascript" async="async" src="./mathjax/MathJax.js"></script>
+<script type="text/javascript" async="async" src="https://cdn.jsdelivr.net/npm/mathjax@2/MathJax.js"></script>
   <link href="doxygen.css" rel="stylesheet" type="text/css" />
   <link href="doxygen-awesome.css" rel="stylesheet" type="text/css"/>
   <link rel="stylesheet" href="devibeans.css">
@@ -58,6 +58,7 @@ $(function() {
     <table cellspacing="0" cellpadding="0">
       <tbody>
         <tr style="height: 56px;">
+          <td id="projectlogo"><img alt="Logo" src="calc1.jpg" /></td>
           <td id="projectalign" style="padding-left: 0.5em;">
             <div id="projectname">
               <a href="index.html">Evaluate</a>
@@ -153,7 +154,7 @@ $(function(){initNavTree('group__group__string.html',''); initResizable(true); }
 <p>Check if the character is a letter. </p>
 <dl class="params"><dt>Parameters</dt><dd>
   <table class="params">
-    <tr><td class="paramdir">[in]</td><td class="paramname">str</td><td>input character</td></tr>
+    <tr><td class="paramdir">[in]</td><td class="paramname">ch</td><td>input character</td></tr>
   </table>
   </dd>
 </dl>

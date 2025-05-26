@@ -61,7 +61,7 @@ PROJECT_BRIEF          =
 # pixels and the maximum width should not exceed 200 pixels. Doxygen will copy
 # the logo to the output directory.
 
-PROJECT_LOGO           = ./images/hare.png
+PROJECT_LOGO           = ./images/calc1.jpg
 
 # The OUTPUT_DIRECTORY tag is used to specify the (relative or absolute) path
 # into which the generated documentation will be written. If a relative path is
@@ -1392,7 +1392,6 @@ HTML_EXTRA_FILES       = ./config//doxygen-awesome-css-2.2.0/doxygen-awesome-dar
                          ./config//doxygen-awesome-css-2.2.0/doxygen-awesome-interactive-toc.js \
                          ./config//doxygen-awesome-css-2.2.0/doxygen-awesome-tabs.js \
                          ./config//highlight.js \
-                         ./config//MathJax.js \
                          ./config//devibeans.css
 
 # The HTML_COLORSTYLE tag can be used to specify if the generated HTML output
@@ -1813,7 +1812,7 @@ MATHJAX_FORMAT         = HTML-CSS
 # - in case of MathJax version 3: https://cdn.jsdelivr.net/npm/mathjax@3
 # This tag requires that the tag USE_MATHJAX is set to YES.
 
-MATHJAX_RELPATH        = ./mathjax
+MATHJAX_RELPATH        =
 
 # The MATHJAX_EXTENSIONS tag can be used to specify one or more MathJax
 # extension names that should be enabled during MathJax rendering. For example

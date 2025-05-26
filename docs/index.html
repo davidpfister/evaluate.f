@@ -37,7 +37,7 @@ MathJax.Hub.Config({
   jax: ["input/TeX","output/HTML-CSS"],
 });
 </script>
-<script type="text/javascript" async="async" src="./mathjax/MathJax.js"></script>
+<script type="text/javascript" async="async" src="https://cdn.jsdelivr.net/npm/mathjax@2/MathJax.js"></script>
   <link href="doxygen.css" rel="stylesheet" type="text/css" />
   <link href="doxygen-awesome.css" rel="stylesheet" type="text/css"/>
   <link rel="stylesheet" href="devibeans.css">
@@ -58,6 +58,7 @@ $(function() {
     <table cellspacing="0" cellpadding="0">
       <tbody>
         <tr style="height: 56px;">
+          <td id="projectlogo"><img alt="Logo" src="calc1.jpg" /></td>
           <td id="projectalign" style="padding-left: 0.5em;">
             <div id="projectname">
               <a href="index.html">Evaluate</a>
@@ -196,8 +197,7 @@ $(function(){initNavTree('index.html',''); initResizable(true); });
 Introduction</h1>
 <h2><a class="anchor" id="autotoc_md1"></a>
 About the Project</h2>
-<p><img src="https://github.com/davidpfister/evaluate.f/blob/master/.dox/images/calc1.jpg?raw=true" alt="" class="inline"/> </p>
-<p>This repo contains routines for evaluating mathematical expressions contained in strings, e.g., <code>cos((a+b)^2+1.6*log(c))</code>. It is a modernized version of the code developed by <a href="https://gbenthien.net/strings/index.html">George Benthien</a>.</p>
+<center> </center><center> <img src="https://github.com/davidpfister/evaluate.f/blob/master/.dox/images/calc1.jpg?raw=true" alt="" width="512" height="512" class="inline"/> </center><center> </center><p>This repo contains routines for evaluating mathematical expressions contained in strings, e.g., <code>cos((a+b)^2+1.6*log(c))</code>. It is a modernized version of the code developed by <a href="https://gbenthien.net/strings/index.html">George Benthien</a>.</p>
 <p>I came across George's code while working on <a href="https://github.com/davidpfister/benchmark.f">benchmark.f</a>. I created an example which contains all the equation parsers I could find and I was impressed by the performances of the present code. I decided to give it a bit more visibility by creating this repo and started to work on some modernization. It is now up-to-date, fully type-explicit, and fpm-compatible.</p>
 <p>The strings expressions can contain numbers (e.g., <code>1.5</code> or <code>1.5e6</code>), previously defined parameters (like <code>a</code>,<code>b</code>, <code>c</code> above), arithmetic operators (<code>+</code>,<code>-</code>,<code>*</code>,<code>/</code>,<code>^</code>, <code>**</code>), and any of the functions (<code>sin</code>, <code>cos</code>, <code>tan</code>, <code>log10</code>, <code>log</code>, <code>abs</code>, <code>exp</code>, <code>sqrt</code>, <code>real</code>, <code>imag</code>, <code>conjg</code>, and <code>ang</code>). They can also contain nested levels of parentheses. The module also contains routines for defining and retrieving user-specified parameters. The quantity <code>pi</code> and the imaginary unit <code>i</code> are pre-defined parameters.</p>
 <ul>
