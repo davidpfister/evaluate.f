@@ -1,7 +1,7 @@
 #include "../include/assertion.inc"
 TESTPROGRAM(main)
 
-    TEST(evaluate_tests)
+    TEST('evaluate_tests')
         use test_data
         use evaluate
 
